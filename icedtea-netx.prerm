@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+basedir=/usr/lib/jvm/java-6-openjdk
+basediralias=/usr/lib/jvm/java-6-openjdk
+tools='javaws'
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then
+    for i in $tools; do
+        update-alternatives --remove $i $basediralias/jre/bin/$i
+    done
+fi
+
+#DEBHELPER#

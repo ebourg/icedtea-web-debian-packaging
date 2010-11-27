@@ -1,0 +1,56 @@
+icedtea-web (1.0~20101127-0ubuntu1) natty; urgency=low
+
+  * Update to hg 20101127.
+  * icedtea-plugin: Add versioned conflict/replaces with icedtea6-plugin
+    (<< 6b21.0~20101127~). LP: #673524.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 27 Nov 2010 11:51:06 +0100
+
+icedtea-web (1.0~20101124-0ubuntu1) natty; urgency=low
+
+  * Update to hg 20101124.
+  * Fix xulrunner dependencies for natty.
+  * Build-depend on pkg-config and libgtk2.0-dev.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 24 Nov 2010 13:23:28 +0100
+
+icedtea-web (1.0~20101021-0ubuntu6) natty; urgency=low
+
+  * Fix link flag ordering issues
+    - add debian/patches/001_fix_pluginappletviewer_linkage.patch
+    - add debian/patches/series
+    - update debian/rules
+    - update debian/control{.in}
+  * Change xulrunner build-dep to xulrunner-2.0-dev for Natty and rebuild
+    against the latest version. Change binary dependency to
+    xulrunner-2.0 | firefox (>= 4.0~b7), because eventually, xulrunner will
+    not be installed by default and we don't want to force Firefox users to
+    install it
+    - update debian/rules
+    - update debian/control
+
+ -- Chris Coulson <chris.coulson@canonical.com>  Tue, 23 Nov 2010 21:19:01 +0000
+
+icedtea-web (1.0~20101021-0ubuntu4) natty; urgency=low
+
+  * Add a versioned build dependency on openjdk-6-jdk (>= 6b20-1.10~pre2).
+
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 22 Oct 2010 00:23:34 +0200
+
+icedtea-web (1.0~20101021-0ubuntu3) natty; urgency=low
+
+  * Build icedtea6-plugin on amd64, i386 and powerpc only.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 21 Oct 2010 23:54:17 +0200
+
+icedtea-web (1.0~20101021-0ubuntu2) natty; urgency=low
+
+  * Fix version of the transitional icedtea6-plugin package.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 21 Oct 2010 23:48:49 +0200
+
+icedtea-web (1.0~20101021-0ubuntu1) natty; urgency=low
+
+  * Initial release, split out from openjdk-6.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 21 Oct 2010 08:07:41 +0200
