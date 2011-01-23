@@ -3,9 +3,9 @@ Section: java
 Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>
-Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b20-1.10~pre2), zip, lsb-release, libgtk2.0-dev, pkg-config
+Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b18-1.8.3), zip, lsb-release, libgtk2.0-dev, pkg-config
 Standards-Version: 3.9.1
-Homepage: http://icedtea.classpath.org/
+Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
 Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
 
@@ -42,9 +42,9 @@ Description: web browser plugin based on OpenJDK and IcedTea to execute Java app
 
 Package: icedtea6-plugin
 Section: web
-Architecture: amd64 i386 lpia powerpc
-Depends: icedtea-plugin
-Description: web browser plugin based on OpenJDK and IcedTea to execute Java applets (dependency package)
+Architecture: any
+Depends: icedtea-plugin, ${misc:Depends}
+Description: web browser plugin to execute Java applets (dependency package)
  IcedTeaPlugin is a web browser plugin to execute Java applets, supporting
  LiveConnect/JavaScript. It is targeted for xulrunner-1.9 and compatible
  browsers that support the NPAPI.

@@ -1,3 +1,33 @@
+icedtea-web (1.0~20110122-1) experimental; urgency=low
+
+  * Upload to experimental.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sun, 23 Jan 2011 13:53:14 +0100
+
+icedtea-web (1.0~20110122-0lucid1) lucid; urgency=low
+
+  * Update to hg 20110122.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 22 Jan 2011 21:21:29 +0100
+
+icedtea-web (1.0~20101223-0ubuntu3) natty; urgency=low
+
+  * Fix the armel build.
+
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 24 Dec 2010 12:31:32 +0100
+
+icedtea-web (1.0~20101223-0ubuntu2) natty; urgency=low
+
+  * Build the plugin on armel.
+
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 24 Dec 2010 11:51:37 +0100
+
+icedtea-web (1.0~20101223-0ubuntu1) natty; urgency=low
+
+  * Update to hg 20101223.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 23 Dec 2010 14:20:21 +0100
+
 icedtea-web (1.0~20101127-0ubuntu1) natty; urgency=low
 
   * Update to hg 20101127.

@@ -19,7 +19,7 @@ ifeq ($(distrel),n/a)
 endif
 
 arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc sparc=sparc sparc64=sparc64 sh4=sh s390=s390 ia64=ia64
-archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc sparc=sparc sparc64=sparc64 sh4=sh s390=s390 ia64=ia64
+archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 ia64=ia64
 
 jvmarch	  := $(strip $(patsubst $(DEB_HOST_ARCH)=%, %, \
 			   $(filter $(DEB_HOST_ARCH)=%, $(arch_map))))
@@ -193,6 +193,8 @@ install: build packaging-files
 	dh_testroot
 	dh_clean -k
 	dh_installdirs -p$(p_netx) \
+		$(jdk_home)/bin \
+		$(jdk_home)/man/man1 \
 		usr/share/applications \
 		usr/share/application-registry \
 		usr/share/mime-info
@@ -202,16 +204,26 @@ install: build packaging-files
 
 	$(MAKE) -C build install DESTDIR=$(CURDIR)/$(d_netx)
 
-	mkdir -p $(d_netx)/$(jdk_home)/bin
+	# FIXME: split out an icedtea-netx-doc package?
+	rm -rf $(d_netx)/usr/share/doc/icedtea-web
+
 	mv $(d_netx)/usr/jre $(d_netx)/$(jdk_home)/
-	mv $(d_netx)/usr/bin $(d_netx)/$(jdk_home)/jre/
-	mv $(d_netx)/usr/man $(d_netx)/$(jdk_home)/jre/
+	mkdir -p $(d_netx)/$(jdk_home)/jre/bin
+	mkdir -p $(d_netx)/$(jdk_home)/jre/man/man1
+	mv $(d_netx)/usr/bin/javaws $(d_netx)/$(jdk_home)/jre/bin/
+	mv $(d_netx)/usr/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
+	rm -rf $(d_netx)/usr/man
+
+	dh_link -p$(p_netx) \
+	  /$(jdk_home)/jre/bin/javaws /$(jdk_home)/bin/javaws \
+	  /$(jdk_home)/jre/man/man1/javaws.1.gz /$(jdk_home)/man/man1/javaws.1.gz
 
 	mv $(d_netx)/$(jdk_home)/jre/lib/$(archdir) \
 		$(d_plug)/$(jdk_home)/jre/lib/
 ifeq ($(with_plugin_pkg),yes)
 	mv $(d_netx)/$(jdk_home)/jre/lib/plugin.jar \
 		$(d_plug)/$(jdk_home)/jre/lib/
+	chmod 644 $(d_plug)/$(jdk_home)/jre/lib/plugin.jar
 endif
 
 	 cp -p debian/icedtea-netx-javaws.desktop \
@@ -244,9 +256,7 @@ binary-arch: install
 	dh_installdeb -s
 	dh_shlibdeps -s
 	dh_gencontrol -s -N icedtea6-plugin -- $(control_vars)
-ifneq (,$(filter $(DEB_HOST_ARCH), amd64 i386 lpia powerpc))
 	dh_gencontrol -p icedtea6-plugin -- -v6b2$(PKGVERSION) $(control_vars)
-endif
 	dh_md5sums -s
 	dh_builddeb -s
 
