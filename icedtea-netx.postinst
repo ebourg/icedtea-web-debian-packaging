@@ -10,7 +10,7 @@ tools='javaws'
 
 case "$1" in
 configure)
-    for i in $jre_tools; do
+    for i in $tools; do
         unset slave1 slave2 || true
         if [ -e $mandir/man1/$i.$srcext ]; then
             slave1="--slave \

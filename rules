@@ -18,8 +18,8 @@ ifeq ($(distrel),n/a)
   distrel := sid
 endif
 
-arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc sparc=sparc sparc64=sparc64 sh4=sh s390=s390 ia64=ia64
-archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 ia64=ia64
+arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparc64 sh4=sh s390=s390 ia64=ia64
+archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 ia64=ia64
 
 jvmarch	  := $(strip $(patsubst $(DEB_HOST_ARCH)=%, %, \
 			   $(filter $(DEB_HOST_ARCH)=%, $(arch_map))))
@@ -68,8 +68,8 @@ else
     bd_plugin = xulrunner-1.9.2-dev,
     xulrunner_depends = xulrunner-1.9.2
   else
-    bd_plugin = xulrunner-2.0-dev,
-    xulrunner_depends = xulrunner-2.0 | firefox (>= 4.0~b7)
+    bd_plugin = firefox-dev,
+    xulrunner_depends = firefox (>= 4.0~b7)
   endif
 endif
 
@@ -93,6 +93,8 @@ endif
 
 control_vars = \
 	'-Vxulrunner:Depends=$(xulrunner_depends)'
+
+#	--prefix=/$(jdk_home) \
 
 CONFIGURE_ARGS = \
 	--prefix=/usr \
@@ -195,11 +197,14 @@ install: build packaging-files
 	dh_installdirs -p$(p_netx) \
 		$(jdk_home)/bin \
 		$(jdk_home)/man/man1 \
+		$(jdk_home)/jre/bin \
+		$(jdk_home)/jre/man/man1 \
 		usr/share/applications \
 		usr/share/application-registry \
 		usr/share/mime-info
 	dh_installdirs -p$(p_plug) \
-		$(jdk_home)/jre/lib \
+		$(jdk_home)/jre/lib/$(archdir) \
+		usr/share/icedtea-web \
 		$(foreach d, $(browser_plugin_dirs), usr/lib/$(d)/plugins)
 
 	$(MAKE) -C build install DESTDIR=$(CURDIR)/$(d_netx)
@@ -207,23 +212,18 @@ install: build packaging-files
 	# FIXME: split out an icedtea-netx-doc package?
 	rm -rf $(d_netx)/usr/share/doc/icedtea-web
 
-	mv $(d_netx)/usr/jre $(d_netx)/$(jdk_home)/
-	mkdir -p $(d_netx)/$(jdk_home)/jre/bin
-	mkdir -p $(d_netx)/$(jdk_home)/jre/man/man1
 	mv $(d_netx)/usr/bin/javaws $(d_netx)/$(jdk_home)/jre/bin/
-	mv $(d_netx)/usr/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
-	rm -rf $(d_netx)/usr/man
+	mv $(d_netx)/usr/share/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
 
 	dh_link -p$(p_netx) \
 	  /$(jdk_home)/jre/bin/javaws /$(jdk_home)/bin/javaws \
 	  /$(jdk_home)/jre/man/man1/javaws.1.gz /$(jdk_home)/man/man1/javaws.1.gz
 
-	mv $(d_netx)/$(jdk_home)/jre/lib/$(archdir) \
-		$(d_plug)/$(jdk_home)/jre/lib/
+	mv $(d_netx)/usr/lib/IcedTeaPlugin.so \
+		$(d_plug)/$(jdk_home)/jre/lib/$(archdir)/
 ifeq ($(with_plugin_pkg),yes)
-	mv $(d_netx)/$(jdk_home)/jre/lib/plugin.jar \
-		$(d_plug)/$(jdk_home)/jre/lib/
-	chmod 644 $(d_plug)/$(jdk_home)/jre/lib/plugin.jar
+	mv $(d_netx)/usr/share/icedtea-web/plugin.jar \
+		$(d_plug)/usr/share/icedtea-web/plugin.jar
 endif
 
 	 cp -p debian/icedtea-netx-javaws.desktop \

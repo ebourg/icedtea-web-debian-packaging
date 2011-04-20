@@ -1,3 +1,31 @@
+icedtea-web (1.1~20110406-0ubuntu2) natty; urgency=low
+
+  * Reapply xulrunner → firefox-dev change from 1.1~20110320-0ubuntu2, which
+    were overwritten in the previous upload.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 19 Apr 2011 08:47:28 +0200
+
+icedtea-web (1.1~20110406-0ubuntu1) natty; urgency=low
+
+  * Fix typo in icedtea-netx postinst to install the javaws alternative.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 06 Apr 2011 13:10:44 +0200
+
+icedtea-web (1.1~20110320-0ubuntu2) natty; urgency=low
+
+  * Switch build-depends to firefox-dev for natty. xulrunner is
+    being demoted from main  (LP: #740815)
+    - update debian/rules
+    - update debian/control
+
+ -- Chris Coulson <chris.coulson@canonical.com>  Mon, 04 Apr 2011 11:07:15 +0100
+
+icedtea-web (1.1~20110320-0ubuntu1) natty; urgency=low
+
+  * Update to hg 20110320.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 24 Feb 2011 12:57:25 +0100
+
 icedtea-web (1.0~20110122-1) experimental; urgency=low
 
   * Upload to experimental.
