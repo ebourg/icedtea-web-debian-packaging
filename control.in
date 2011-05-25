@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>
 Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b18-1.8.3), zip, lsb-release, libgtk2.0-dev, pkg-config
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
 Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
@@ -12,8 +12,8 @@ Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
 Package: icedtea-netx
 Architecture: any
 Depends: openjdk-6-jre, ${shlibs:Depends}, ${misc:Depends}
-Conflicts: openjdk-6-jre (<< 6b20-1.10~pre2-0ubuntu2), openjdk-6-jre-headless (<< 6b20-1.10~pre2-0ubuntu2)
-Replaces: openjdk-6-jre (<< 6b20-1.10~pre2-0ubuntu2), openjdk-6-jre-headless (<< 6b20-1.10~pre2-0ubuntu2)
+Conflicts: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
+Replaces: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
 Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
  NetX provides a drop-in replacement for javaws (Java Web Start). Since
  upstream NetX is dormant, IcedTea is hosting and modifying the sources
@@ -28,8 +28,8 @@ Package: icedtea-plugin
 Section: web
 Architecture: any
 Depends: openjdk-6-jre, icedtea-netx (= ${binary:Version}), ${xulrunner:Depends}, ${shlibs:Depends}, ${misc:Depends}
-Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b21.0~20101127~)
-Replaces: icedtea-gcjwebplugin, openjdk-6-jre (<< 6b20-1.10~pre2), icedtea6-plugin (<< 6b21.0~20101127~)
+Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b18-1.8.7-3)
+Replaces: icedtea-gcjwebplugin, openjdk-6-jre (<< 6b18-1.8.7-3), icedtea6-plugin (<< 6b18-1.8.7-3)
 Provides: icedtea6-plugin
 Xb-Npp-Description: IcedTea6 Java Web Browser Plugin (execution of applets on web pages)
 Xb-Npp-Applications: ec8030f7-c20a-464f-9b0e-13a3a9e97384, 92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a, aa5ca914-c309-495d-91cf-3141bbb04115
@@ -42,7 +42,7 @@ Description: web browser plugin based on OpenJDK and IcedTea to execute Java app
 
 Package: icedtea6-plugin
 Section: web
-Architecture: any
+Architecture: all
 Depends: icedtea-plugin, ${misc:Depends}
 Description: web browser plugin to execute Java applets (dependency package)
  IcedTeaPlugin is a web browser plugin to execute Java applets, supporting

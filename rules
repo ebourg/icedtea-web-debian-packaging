@@ -237,17 +237,28 @@ endif
 	 done
 
 binary-indep: install
-# nothing to do
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdocs -i
+	dh_installchangelogs  -i
+	rm -rf $(d_plug)/usr/share/doc/$(p_plug)
+	ln -s $(p_netx) $(d_plug)/usr/share/doc/$(p_plug)
+	rm -rf debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
+	ln -s $(p_plug) debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -p icedtea6-plugin -- -v6b2$(PKGVERSION) $(control_vars)
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary: binary-arch binary-indep
 
 binary-arch: install
 	dh_testdir -s
 	dh_testroot -s
 	dh_installdocs -s README NEWS AUTHORS
 	dh_installchangelogs  -s
-	rm -rf $(d_plug)/usr/share/doc/$(p_plug)
-	ln -s $(p_netx) $(d_plug)/usr/share/doc/$(p_plug)
-	rm -rf debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
-	ln -s $(p_plug) debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
 	dh_strip -s
 	dh_link -s
 	dh_installmenu -s
