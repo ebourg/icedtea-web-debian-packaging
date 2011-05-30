@@ -69,7 +69,7 @@ else
     xulrunner_depends = xulrunner-1.9.2
   else
     bd_plugin = firefox-dev,
-    xulrunner_depends = firefox (>= 4.0~b7)
+    xulrunner_depends = firefox (>= 4.0~b7) | chromium-browser | epiphany-browser | midori
   endif
 endif
 
