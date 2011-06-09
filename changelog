@@ -1,3 +1,27 @@
+icedtea-web (1.1-1ubuntu1) oneiric; urgency=low
+
+  * Rebuild the control file.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 09 Jun 2011 12:03:52 +0200
+
+icedtea-web (1.1-1) unstable; urgency=low
+
+  * IcedTea-Web 1.1 release.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 09 Jun 2011 11:58:59 +0200
+
+icedtea-web (1.1~20110608-1ubuntu1) oneiric; urgency=low
+
+  * Rebuild the control file.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 09 Jun 2011 10:39:20 +0200
+
+icedtea-web (1.1~20110608-1) unstable; urgency=low
+
+  * Update to hg 20110608, taken from the icedtea-web-1.1 release branch.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 08 Jun 2011 22:11:08 +0200
+
 icedtea-web (1.1~20110530-1ubuntu1) oneiric; urgency=low
 
   * Regenerate the control file.
