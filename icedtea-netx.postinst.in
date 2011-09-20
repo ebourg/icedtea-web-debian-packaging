@@ -3,9 +3,9 @@
 set -e
 
 priority=1061
-basedir=/usr/lib/jvm/java-6-openjdk
-basediralias=/usr/lib/jvm/java-6-openjdk
-mandir=/usr/lib/jvm/java-6-openjdk/jre/man
+basedir=/@basediralias@/
+basediralias=/@basediralias@/
+mandir=/@basediralias@/jre/man
 tools='javaws'
 
 case "$1" in

@@ -3,7 +3,7 @@ Section: java
 Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>
-Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b18-1.8.3), zip, lsb-release, libgtk2.0-dev, pkg-config
+Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b18-1.8.3), zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
 Standards-Version: 3.9.2
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
@@ -17,8 +17,7 @@ Replaces: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7
 Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
  NetX provides a drop-in replacement for javaws (Java Web Start). Since
  upstream NetX is dormant, IcedTea is hosting and modifying the sources
- in the IcedTea-Web repository.
- directory.
+ in the IcedTea-Web directory.
  .
  IcedTea's NetX currently supports verification of signed jars, trusted
  certificate storing, system certificate store checking, and provides
@@ -27,7 +26,7 @@ Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
 Package: icedtea-plugin
 Section: web
 Architecture: any
-Depends: openjdk-6-jre, icedtea-netx (= ${binary:Version}), ${xulrunner:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: openjdk-6-jre, icedtea-netx (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b18-1.8.7-3)
 Replaces: icedtea-gcjwebplugin, openjdk-6-jre (<< 6b18-1.8.7-3), icedtea6-plugin (<< 6b18-1.8.7-3)
 Provides: icedtea6-plugin

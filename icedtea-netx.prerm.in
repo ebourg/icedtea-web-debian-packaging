@@ -2,8 +2,8 @@
 
 set -e
 
-basedir=/usr/lib/jvm/java-6-openjdk
-basediralias=/usr/lib/jvm/java-6-openjdk
+basedir=/@basediralias@/
+basediralias=/@basediralias@/
 tools='javaws'
 
 if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then

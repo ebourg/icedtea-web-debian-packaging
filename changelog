@@ -1,3 +1,12 @@
+icedtea-web (1.1.2-1) UNRELEASED; urgency=low
+
+  * Team upload
+  * New upstream release
+  * Drop the dependency on xulrunner (Closes: #636514, #606234, #601779)
+  * Fix FTBFS due to the switch to multiarch (Closes: #641798)
+
+ -- Sylvestre Ledru <sylvestre@debian.org>  Sun, 04 Sep 2011 23:24:45 +0200
+
 icedtea-web (1.1-1ubuntu1) oneiric; urgency=low
 
   * Rebuild the control file.
