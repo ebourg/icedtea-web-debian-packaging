@@ -1,5 +1,6 @@
 icedtea-web (1.1.2-1) UNRELEASED; urgency=low
 
+  [ Sylvestre Ledru ]
   * Team upload
   * New upstream release:
     - PR769: IcedTea-Web does not work with some ssl sites with OpenJDK7.
@@ -7,7 +8,14 @@ icedtea-web (1.1.2-1) UNRELEASED; urgency=low
   * Drop the dependency on xulrunner (Closes: #636514, #606234, #601779)
   * Fix FTBFS due to the switch to multiarch (Closes: #641798)
 
- -- Sylvestre Ledru <sylvestre@debian.org>  Sun, 04 Sep 2011 23:24:45 +0200
+  [ Damien Raude-Morvan ]
+  * Switch to 3.0 (quilt) format.
+  * d/javaws.policy: Allow RuntimePermission for javaws to access
+    sun.security.util package.
+  * d/patches/javaws_change_java_policy.diff: Loading of javaws.policy.
+  * d/rules: Install javaws.policy into /etc/icedtea-web/.
+
+ -- Damien Raude-Morvan <drazzib@debian.org>  Thu, 22 Sep 2011 00:16:28 +0200
 
 icedtea-web (1.1.1-1ubuntu2) oneiric; urgency=low
 

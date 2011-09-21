@@ -218,7 +218,8 @@ ifneq (,$(DEB_HOST_MULTIARCH))
 	dh_installdirs -p$(p_comm) \
 		usr/share/applications \
 		usr/share/application-registry \
-		usr/share/mime-info
+		usr/share/mime-info \
+		etc/icedtea-web
 	dh_installdirs -p$(p_netx) \
 		$(jdk_home)/bin \
 		$(jdk_home)/man/man1 \
@@ -232,7 +233,8 @@ else
 		$(jdk_home)/jre/man/man1 \
 		usr/share/applications \
 		usr/share/application-registry \
-		usr/share/mime-info
+		usr/share/mime-info \
+		etc/icedtea-web
 endif
 	dh_installdirs -p$(p_plug) \
 		$(jdk_home)/jre/lib/$(archdir) \
@@ -256,7 +258,7 @@ endif
 
 ifneq (,$(DEB_HOST_MULTIARCH))
 	mv $(d_netx)/usr/share/icedtea-web $(d_comm)/usr/share/
-
+	cp debian/javaws.policy $(d_comm)/etc/icedtea-web
 	cp -p debian/icedtea-netx-javaws.desktop \
 		$(d_comm)/usr/share/applications/
 
@@ -271,8 +273,8 @@ else
 	mv $(d_netx)/usr/share/icedtea-web/plugin.jar \
 		$(d_plug)/usr/share/icedtea-web/plugin.jar
   endif
-
-	 cp -p debian/icedtea-netx-javaws.desktop \
+	cp debian/javaws.policy $(d_netx)/etc/icedtea-web
+	cp -p debian/icedtea-netx-javaws.desktop \
 		$(d_netx)/usr/share/applications/
 
 	 for i in web-start; do \

@@ -1,0 +1,23 @@
+Description: Prepend -Djava.security.manager -Djava.security.policy=
+ /etc/icedtea-web/javaws.policy to allow specific java security policy
+ for Java WebStart.
+ .
+ The specified policy file will be loaded in *addition* to all the policy
+ files that are specified in JVM security properties file:
+ /etc/java-6-openjdk/security/java.policy 
+Author: Damien Raude-Morvan <drazzib@debian.org>
+Last-Update: 2011-09-21
+Forwarded: no
+Index: b/launcher/javaws.in
+===================================================================
+--- a/launcher/javaws.in
++++ b/launcher/javaws.in
+@@ -8,7 +8,7 @@
+ PROGRAM_NAME=javaws
+ CP=@JRE@/lib/rt.jar
+ 
+-JAVA_ARGS=
++JAVA_ARGS="-Djava.security.manager -Djava.security.policy=/etc/icedtea-web/javaws.policy"
+ ARGS=
+ 
+ while [ "$#" -gt "0" ]; do
