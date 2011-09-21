@@ -1,11 +1,41 @@
 icedtea-web (1.1.2-1) UNRELEASED; urgency=low
 
   * Team upload
-  * New upstream release
+  * New upstream release:
+    - PR769: IcedTea-Web does not work with some ssl sites with OpenJDK7.
+    - Javaws cannot use proxy settings from Firefox.
   * Drop the dependency on xulrunner (Closes: #636514, #606234, #601779)
   * Fix FTBFS due to the switch to multiarch (Closes: #641798)
 
  -- Sylvestre Ledru <sylvestre@debian.org>  Sun, 04 Sep 2011 23:24:45 +0200
+
+icedtea-web (1.1.1-1ubuntu2) oneiric; urgency=low
+
+  * Updates from the 1.1 branch:
+    - PR749: sun.applet.PluginStreamHandler#handleMessage(String) really slow.
+    - PR768: Signed applets/Web Start apps don't work with OpenJDK7 and up.
+
+ -- Matthias Klose <doko@ubuntu.com>  Tue, 16 Aug 2011 22:00:46 +0200
+
+icedtea-web (1.1.1-1ubuntu1) oneiric; urgency=low
+
+  * Rebuild the control file.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 16 Jul 2011 13:43:28 +0200
+
+icedtea-web (1.1.1-1) unstable; urgency=high
+
+  * Upload to unstable.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 16 Jul 2011 13:19:00 +0200
+
+icedtea-web (1.1.1-0ubuntu1) natty-security; urgency=high
+
+  * IcedTea-Web 1.1.1 release.
+    - CVE-2011-2513: Home directory path disclosure to untrusted applications.
+    - CVE-2011-2514: Java Web Start security warning dialog manipulation.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 16 Jul 2011 12:51:46 +0200
 
 icedtea-web (1.1-1ubuntu1) oneiric; urgency=low
 

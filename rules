@@ -3,10 +3,11 @@
 
 vafilt = $(subst $(2)=,,$(filter $(2)=%,$(1)))
 
-DPKG_VARS		 := $(shell dpkg-architecture)
+DPKG_VARS		:= $(shell dpkg-architecture)
 DEB_HOST_GNU_TYPE	?= $(call vafilt,$(DPKG_VARS),DEB_HOST_GNU_TYPE)
-DEB_BUILD_GNU_TYPE      ?= $(call vafilt,$(DPKG_VARS),DEB_BUILD_GNU_TYPE)
-DEB_HOST_ARCH	    ?= $(call vafilt,$(DPKG_VARS),DEB_HOST_ARCH)
+DEB_BUILD_GNU_TYPE	?= $(call vafilt,$(DPKG_VARS),DEB_BUILD_GNU_TYPE)
+DEB_HOST_ARCH		?= $(call vafilt,$(DPKG_VARS),DEB_HOST_ARCH)
+DEB_HOST_MULTIARCH	?= $(call vafilt,$(DPKG_VARS),DEB_HOST_MULTIARCH)
 
 CHANGELOG_VARS := $(shell dpkg-parsechangelog | sed -n 's/ /_/g;/^[^_]/s/^\([^:]*\):_\(.*\)/\1=\2/p')
 PKGSOURCE := $(call vafilt,$(CHANGELOG_VARS),Source)
@@ -18,8 +19,16 @@ ifeq ($(distrel),n/a)
   distrel := sid
 endif
 
-arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparc64 sh4=sh s390=s390 ia64=ia64
-archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 ia64=ia64
+multiarch_dir = /$(DEB_HOST_MULTIARCH)
+ifneq (,$(DEB_HOST_MULTIARCH))
+  ifneq (,$(filter $(distrel),natty))
+    DEB_HOST_MULTIARCH =
+    multiarch_dir =
+  endif
+endif
+
+arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparc64 sh4=sh s390=s390 s390x=s390x ia64=ia64
+archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 s390x=s390x ia64=ia64
 
 jvmarch	  := $(strip $(patsubst $(DEB_HOST_ARCH)=%, %, \
 			   $(filter $(DEB_HOST_ARCH)=%, $(arch_map))))
@@ -30,7 +39,11 @@ TOP = usr/lib/jvm
 jdirname = java-$(shortver)-$(origin)
 origin = openjdk
 basename = openjdk-$(shortver)
-jdk_home = $(TOP)/java-6-openjdk-$(archdir)
+ifneq (,$(DEB_HOST_MULTIARCH))
+  jdk_home = $(TOP)/java-6-openjdk-$(DEB_HOST_ARCH)
+else
+  jdk_home = $(TOP)/java-6-openjdk
+endif
 jdiralias = java-$(shortver)-$(origin)-$(archdir)
 basedir = $(jdk_home)
 vendor = IcedTea
@@ -52,7 +65,7 @@ ifeq ($(distribution),Debian)
     bd_plugin = xulrunner-dev (>= 1.9.0),
   else
     bd_plugin = xulrunner-dev (>= 1.9.1.3-3) [!alpha !sparc64],
-    xulrunner_depends = xulrunner-1.9.1
+    #xulrunner_depends = xulrunner-1.9.1
   endif
 else
   ifneq (,$(filter $(distrel),gutsy feisty edgy dapper))
@@ -92,7 +105,8 @@ ifeq ($(distribution),Ubuntu)
 endif
 
 control_vars = \
-	'-Vxulrunner:Depends=$(xulrunner_depends)'
+	'-Vxulrunner:Depends=$(xulrunner_depends)' \
+	$(if $(DEB_HOST_MULTIARCH),'-Vnetx:Depends=icedtea-netx-common')
 
 #	--prefix=/$(jdk_home) \
 
@@ -106,8 +120,10 @@ ifneq ($(with_plugin_pkg),yes)
 endif
 
 p_netx = icedtea-netx
+p_comm = icedtea-netx-common
 p_plug = icedtea-plugin
 d_netx = debian/$(p_netx)
+d_comm = debian/$(p_comm)
 d_plug = debian/$(p_plug)
 
 debian/control: debian/control.in debian/rules
@@ -115,6 +131,7 @@ debian/control: debian/control.in debian/rules
 	sed \
 		-e 's/@bd_plugin@/$(bd_plugin)/g' \
 	     debian/control.in \
+	     $(if $(DEB_HOST_MULTIARCH),debian/control.common) \
 		  > debian/control
 	@if cmp -s debian/control debian/control.old; then \
 	  rm -f debian/control.old; \
@@ -138,8 +155,6 @@ packaging-files:
 	      -e 's/@RELEASE@/$(shortver)/g' \
 	      -e 's,@TOP@,$(TOP),g' \
 	      -e 's,@basedir@,$(basedir),g' \
-	      -e 's,@basediralias@,$(TOP)/$(jdiralias),g' \
-	      -e 's,@jdiralias@,$(jdiralias),g' \
 	      -e 's,@jdirname@,$(jdirname),g' \
 	      -e 's/@srcname@/$(srcname)/g' \
 	      -e 's/@jvmarch@/$(jvmarch)/g' \
@@ -147,6 +162,7 @@ packaging-files:
 	      -e 's/@tag@/$(tag)/g' \
 	      -e 's/@priority@/$(priority)/g' \
 	      -e 's/@mantag@/$(mantag)/g' \
+	      -e 's/@multiarch@/$(DEB_HOST_MULTIARCH)/g' \
 	      -e 's/@jre_hl_tools@/$(jre_hl_tools_alt)/g' \
 	      -e 's/@jre_tools@/$(jre_tools_alt)/g' \
 	      -e 's/@jdk_tools@/$(jdk_tools_alt)/g' \
@@ -169,6 +185,8 @@ configure-stamp:
 	cd build && ../configure $(CONFIGURE_ARGS)
 	touch $@
 
+build-arch: build-stamp
+build-indep: build-stamp
 build: build-stamp
 build-stamp: configure-stamp
 	dh_testdir
@@ -194,6 +212,17 @@ install: build packaging-files
 	dh_testdir
 	dh_testroot
 	dh_clean -k
+ifneq (,$(DEB_HOST_MULTIARCH))
+	dh_installdirs -p$(p_comm) \
+		usr/share/applications \
+		usr/share/application-registry \
+		usr/share/mime-info
+	dh_installdirs -p$(p_netx) \
+		$(jdk_home)/bin \
+		$(jdk_home)/man/man1 \
+		$(jdk_home)/jre/bin \
+		$(jdk_home)/jre/man/man1
+else
 	dh_installdirs -p$(p_netx) \
 		$(jdk_home)/bin \
 		$(jdk_home)/man/man1 \
@@ -202,6 +231,7 @@ install: build packaging-files
 		usr/share/applications \
 		usr/share/application-registry \
 		usr/share/mime-info
+endif
 	dh_installdirs -p$(p_plug) \
 		$(jdk_home)/jre/lib/$(archdir) \
 		usr/share/icedtea-web \
@@ -221,10 +251,24 @@ install: build packaging-files
 
 	mv $(d_netx)/usr/lib/IcedTeaPlugin.so \
 		$(d_plug)/$(jdk_home)/jre/lib/$(archdir)/
-ifeq ($(with_plugin_pkg),yes)
+
+ifneq (,$(DEB_HOST_MULTIARCH))
+	mv $(d_netx)/usr/share/icedtea-web $(d_comm)/usr/share/
+
+	cp -p debian/icedtea-netx-javaws.desktop \
+		$(d_comm)/usr/share/applications/
+
+	 for i in web-start; do \
+	   cp debian/icedtea-netx-$$i.applications \
+	     $(d_comm)/usr/share/application-registry/; \
+	   cp debian/icedtea-netx-$$i.keys $(d_comm)/usr/share/mime-info/; \
+	   cp debian/icedtea-netx-$$i.mime $(d_comm)/usr/share/mime-info/; \
+	 done
+else
+  ifeq ($(with_plugin_pkg),yes)
 	mv $(d_netx)/usr/share/icedtea-web/plugin.jar \
 		$(d_plug)/usr/share/icedtea-web/plugin.jar
-endif
+  endif
 
 	 cp -p debian/icedtea-netx-javaws.desktop \
 		$(d_netx)/usr/share/applications/
@@ -235,6 +279,7 @@ endif
 	   cp debian/icedtea-netx-$$i.keys $(d_netx)/usr/share/mime-info/; \
 	   cp debian/icedtea-netx-$$i.mime $(d_netx)/usr/share/mime-info/; \
 	 done
+endif
 
 binary-indep: install
 	dh_testdir -i

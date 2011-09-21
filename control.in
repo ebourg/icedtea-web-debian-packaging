@@ -3,7 +3,7 @@ Section: java
 Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>
-Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b18-1.8.3), zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
+Build-Depends: debhelper (>= 5), @bd_plugin@ openjdk-6-jdk (>= 6b23~pre9~), zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
 Standards-Version: 3.9.2
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
@@ -11,7 +11,7 @@ Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
 
 Package: icedtea-netx
 Architecture: any
-Depends: openjdk-6-jre, ${shlibs:Depends}, ${misc:Depends}
+Depends: ${netx:Depends}, openjdk-6-jre (>= 6b23~pre9~), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
 Replaces: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
 Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
