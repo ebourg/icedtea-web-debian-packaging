@@ -1,14 +1,4 @@
-// Based on https://bugzilla.redhat.com/show_bug.cgi?id=471413#c37
-grant {
-   permission java.security.SecurityPermission 
-    "putProviderProperty.SunJCE";
-
-   permission java.lang.RuntimePermission 
-   "accessClassInPackage.sun.security.util";
-
-   permission java.lang.RuntimePermission
-   "accessClassInPackage.sun.security.internal.spec";
-
-   permission java.lang.RuntimePermission
-   "accessClassInPackage.sun.security.internal.interfaces";
+// Based on Oracle JDK policy file
+grant codeBase "file:/usr/share/icedtea-web/netx.jar" {
+    permission java.security.AllPermission;
 };
