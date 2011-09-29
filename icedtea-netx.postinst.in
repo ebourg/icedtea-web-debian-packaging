@@ -3,9 +3,8 @@
 set -e
 
 priority=1061
-basedir=/@basediralias@/
-basediralias=/@basediralias@/
-mandir=/@basediralias@/jre/man
+basedir=/@basedir@
+mandir=$basedir/jre/man
 tools='javaws'
 
 case "$1" in
@@ -22,7 +21,7 @@ configure)
             --install \
             /usr/bin/$i \
             $i \
-            $basediralias/jre/bin/$i \
+            $basedir/jre/bin/$i \
             $priority \
             $slave1 $slave2
     done

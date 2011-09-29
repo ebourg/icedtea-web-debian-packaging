@@ -21,7 +21,7 @@ endif
 
 multiarch_dir = /$(DEB_HOST_MULTIARCH)
 ifneq (,$(DEB_HOST_MULTIARCH))
-  ifneq (,$(filter $(distrel),natty))
+  ifneq (,$(filter $(distrel),natty oneiric))
     DEB_HOST_MULTIARCH =
     multiarch_dir =
   endif
@@ -44,7 +44,6 @@ ifneq (,$(DEB_HOST_MULTIARCH))
 else
   jdk_home = $(TOP)/java-6-openjdk
 endif
-jdiralias = java-$(shortver)-$(origin)-$(archdir)
 basedir = $(jdk_home)
 vendor = IcedTea
 shortver = 6
@@ -155,8 +154,6 @@ packaging-files:
 	      -e 's/@RELEASE@/$(shortver)/g' \
 	      -e 's,@TOP@,$(TOP),g' \
 	      -e 's,@basedir@,$(basedir),g' \
-	      -e 's,@basediralias@,$(TOP)/$(jdiralias),g' \
-	      -e 's,@jdiralias@,$(jdiralias),g' \
 	      -e 's,@jdirname@,$(jdirname),g' \
 	      -e 's/@srcname@/$(srcname)/g' \
 	      -e 's/@jvmarch@/$(jvmarch)/g' \
@@ -297,7 +294,9 @@ binary-indep: install
 	dh_compress -i
 	dh_fixperms -i
 	dh_installdeb -i
+ifneq (,$(DEB_HOST_MULTIARCH))
 	dh_gencontrol -p icedtea-netx-common -- $(control_vars)
+endif
 	dh_gencontrol -p icedtea6-plugin -- -v6b2$(PKGVERSION) $(control_vars)
 	dh_md5sums -i
 	dh_builddeb -i

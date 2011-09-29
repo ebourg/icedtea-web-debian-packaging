@@ -2,7 +2,7 @@
 
 browser_dirs="@browser_dirs@"
 PLUGIN=@plugin_name@
-PLUGINPTH=/@basediralias@/jre/lib/@archdir@/$PLUGIN
+PLUGINPTH=/@basedir@/jre/lib/@archdir@/$PLUGIN
 
 for browser_dir in $browser_dirs; do
     if [ $browser_dir = xulrunner-addons ]; then

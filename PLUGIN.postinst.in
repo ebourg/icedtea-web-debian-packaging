@@ -5,8 +5,8 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 priority=@priority@
 browser_dirs="@browser_dirs@"
 PLUGIN=@plugin_name@
-PLUGINPTH=/@basediralias@/jre/lib/@archdir@/$PLUGIN
-NPPLUGINPTH=/@basediralias@/jre/lib/@archdir@/IcedTeaNPPlugin.so
+PLUGINPTH=/@basedir@/jre/lib/@archdir@/$PLUGIN
+NPPLUGINPTH=/@basedir@/jre/lib/@archdir@/IcedTeaNPPlugin.so
 LAST_NPP_VERSION=6b18~pre2-2
 
 # IcedTeaPlugin -> IcedTeaNPPlugin update
