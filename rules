@@ -245,10 +245,13 @@ endif
 
 	mv $(d_netx)/usr/bin/javaws $(d_netx)/$(jdk_home)/jre/bin/
 	mv $(d_netx)/usr/share/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
+	mv debian/itweb-settings.1 $(d_netx)/$(jdk_home)/jre/man/man1/
 
 	dh_link -p$(p_netx) \
 	  /$(jdk_home)/jre/bin/javaws /$(jdk_home)/bin/javaws \
-	  /$(jdk_home)/jre/man/man1/javaws.1.gz /$(jdk_home)/man/man1/javaws.1.gz
+	  /$(jdk_home)/jre/man/man1/javaws.1.gz /$(jdk_home)/man/man1/javaws.1.gz \
+          /$(jdk_home)/jre/man/man1/itweb-settings.1.gz /$(jdk_home)/man/man1/itweb-settings.gz
+
 
 	mv $(d_netx)/usr/lib/IcedTeaPlugin.so \
 		$(d_plug)/$(jdk_home)/jre/lib/$(archdir)/
