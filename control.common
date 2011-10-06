@@ -7,7 +7,6 @@ Replaces: icedtea-netx (<< 1.1.2-1~), icedtea-plugin (<< 1.1.2-1~), openjdk-6-jr
 Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
  NetX provides a drop-in replacement for javaws (Java Web Start). Since
  upstream NetX is dormant, IcedTea is hosting and modifying the sources
- in the IcedTea-Web repository.
- directory.
+ in the IcedTea-Web directory.
  .
  This package contains the architecture independent files.
