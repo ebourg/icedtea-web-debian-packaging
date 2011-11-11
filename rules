@@ -245,7 +245,11 @@ endif
 
 	mv $(d_netx)/usr/bin/javaws $(d_netx)/$(jdk_home)/jre/bin/
 	mv $(d_netx)/usr/share/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
+	mv $(d_netx)/usr/bin/itweb-settings $(d_netx)/$(jdk_home)/jre/bin/
 	mv debian/itweb-settings.1 $(d_netx)/$(jdk_home)/jre/man/man1/
+	
+	# compress manpages
+	find $(d_netx)/$(jdk_home)/jre/man/man1/ -type f ! -type l | xargs gzip -9v
 
 	dh_link -p$(p_netx) \
 	  /$(jdk_home)/jre/bin/javaws /$(jdk_home)/bin/javaws \

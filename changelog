@@ -1,8 +1,16 @@
-icedtea-web (1.1.3-3) UNRELEASED; urgency=low
+icedtea-web (1.1.4-1) unstable; urgency=medium
 
+  * New upstream release with security fix :
+    - RH742515, CVE-2011-3377: IcedTea-Web: second-level domain subdomains
+      and suffix domain SOP bypass
+
+  [ Sylvestre Ledru ]
   * Fix a typo in the description. (Closes: #644538)
 
- -- Sylvestre Ledru <sylvestre@debian.org>  Thu, 06 Oct 2011 23:17:11 +0200
+  [ Damien Raude-Morvan ]
+  * Compress manpages. (Closes: #642975)
+
+ -- Damien Raude-Morvan <drazzib@debian.org>  Fri, 11 Nov 2011 12:21:32 +0100
 
 icedtea-web (1.1.3-2) unstable; urgency=low
 

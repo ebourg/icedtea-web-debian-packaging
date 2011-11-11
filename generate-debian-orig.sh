@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=1.1.3
+version=1.1.4
 base=icedtea-web
 pkgdir=$base-$version
 origtar=${base}_${version}.orig.tar.gz

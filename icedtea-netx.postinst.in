@@ -5,12 +5,14 @@ set -e
 priority=1061
 basedir=/@basedir@
 mandir=$basedir/jre/man
-tools='javaws'
+tools='javaws itweb-settings'
+srcext=1.gz
+dstext=1.gz
 
 case "$1" in
 configure)
     for i in $tools; do
-        unset slave1 slave2 || true
+        unset slave1 || true
         if [ -e $mandir/man1/$i.$srcext ]; then
             slave1="--slave \
                 /usr/share/man/man1/$i.$dstext \
@@ -23,7 +25,7 @@ configure)
             $i \
             $basedir/jre/bin/$i \
             $priority \
-            $slave1 $slave2
+            $slave1
     done
 esac
 
