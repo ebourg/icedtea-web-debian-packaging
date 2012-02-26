@@ -1,3 +1,23 @@
+icedtea-web (1.2~pre2-0ubuntu1) precise; urgency=low
+
+  * Update to hg 20120226, taken from the icedtea-web-1.2 release branch.
+  * Fix icedtea-7-plugin update.
+  * Apply proposed patch for PR820, crashes with Firefox 10.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sun, 26 Feb 2012 17:26:04 +0100
+
+icedtea-web (1.2~pre1-0ubuntu1) precise; urgency=low
+
+  * Update to hg 20120203, taken from the icedtea-web-1.2 release branch.
+  * Build separate plugin packages for OpenJDK 6 and OpenJDK 7, needed
+    to provide the path to the runtime and the mime description in the plugin.
+  * Use icedtea-<jre version>-plugin as the name for both plugin packages.
+  * Remove icedtea-web-1.1.4-npapi-fix.patch, fixed upstream.
+  * Pass -n to gzip when compressing manpages to be Multi-Arch: same safe.
+  * Build multiarch packages.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 04 Feb 2012 18:19:46 +0100
+
 icedtea-web (1.1.4-1) unstable; urgency=medium
 
   * New upstream release with security fix :
@@ -33,7 +53,7 @@ icedtea-web (1.1.3-1) unstable; urgency=low
     - Plug-in: PR782: Support building against npapi-sdk as well.
     - Common: PR794: IcedTea-Web does not work if a Web Start app jar has a
       Class-Path element in the manifest (e.g. Elluminate)
-  * d/javaws.policy: Use AllPermission for netx.jar (as in Oracle JDK). 
+  * d/javaws.policy: Use AllPermission for netx.jar (as in Oracle JDK).
   * Add myself as Uploader.
 
  -- Damien Raude-Morvan <drazzib@debian.org>  Thu, 29 Sep 2011 00:18:39 +0200

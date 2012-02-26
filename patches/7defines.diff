@@ -1,0 +1,69 @@
+diff -r c9a253d0952b Makefile.am
+--- a/Makefile.am	Wed Feb 22 10:18:45 2012 -0500
++++ b/Makefile.am	Sun Feb 26 17:39:02 2012 +0100
+@@ -213,7 +213,7 @@
+ 	mkdir -p $(PLUGIN_DIR) && \
+ 	cd $(PLUGIN_DIR) && \
+ 	$(CXX) $(CXXFLAGS) \
+-	   $(DEFS) \
++	   $(DEFS) $(VERSION_DEFS) \
+ 	  -DJDK_UPDATE_VERSION="\"$(JDK_UPDATE_VERSION)\"" \
+ 	  -DPLUGIN_NAME="\"IcedTea-Web Plugin\"" \
+ 	  -DPLUGIN_VERSION="\"$(PLUGIN_VERSION)\"" \
+diff -r c9a253d0952b acinclude.m4
+--- a/acinclude.m4	Wed Feb 22 10:18:45 2012 -0500
++++ b/acinclude.m4	Sun Feb 26 17:39:02 2012 +0100
+@@ -673,6 +676,11 @@
+   fi
+   AC_MSG_RESULT(${JAVA})
+   AC_SUBST(JAVA)
++  JAVA_VERSION=`$JAVA -version 2>&1 | sed -n '1s/@<:@^"@:>@*"\(.*\)"$/\1/p'`
++  case "${JAVA_VERSION}" in
++    1.7*) VERSION_DEFS='-DHAVE_JAVA7';;
++  esac
++  AC_SUBST(VERSION_DEFS)
+ ])
+ 
+ AC_DEFUN_ONCE([IT_FIND_KEYTOOL],
+diff -r c9a253d0952b plugin/icedteanp/IcedTeaNPPlugin.cc
+--- a/plugin/icedteanp/IcedTeaNPPlugin.cc	Wed Feb 22 10:18:45 2012 -0500
++++ b/plugin/icedteanp/IcedTeaNPPlugin.cc	Sun Feb 26 17:39:02 2012 +0100
+@@ -90,6 +90,18 @@
+ #define PLUGIN_FULL_NAME PLUGIN_NAME " (using " PLUGIN_VERSION ")"
+ #define PLUGIN_DESC "The <a href=\"" PACKAGE_URL "\">" PLUGIN_NAME "</a> executes Java applets."
+ 
++#ifdef HAVE_JAVA7
++ #define JPI_VERSION "1.7.0_" JDK_UPDATE_VERSION
++ #define PLUGIN_APPLET_MIME_DESC7 \
++  "application/x-java-applet;version=1.7:class,jar:IcedTea;"
++ #define PLUGIN_BEAN_MIME_DESC7 \
++  "application/x-java-bean;version=1.7:class,jar:IcedTea;"
++#else
++ #define JPI_VERSION "1.6.0_" JDK_UPDATE_VERSION
++ #define PLUGIN_APPLET_MIME_DESC7
++ #define PLUGIN_BEAN_MIME_DESC7
++#endif
++
+ #define PLUGIN_MIME_DESC                                               \
+   "application/x-java-vm:class,jar:IcedTea;"                           \
+   "application/x-java-applet:class,jar:IcedTea;"                       \
+@@ -107,7 +119,8 @@
+   "application/x-java-applet;version=1.4.2:class,jar:IcedTea;"         \
+   "application/x-java-applet;version=1.5:class,jar:IcedTea;"           \
+   "application/x-java-applet;version=1.6:class,jar:IcedTea;"           \
+-  "application/x-java-applet;jpi-version=1.6.0_" JDK_UPDATE_VERSION ":class,jar:IcedTea;"  \
++  PLUGIN_APPLET_MIME_DESC7 \
++  "application/x-java-applet;jpi-version=" JPI_VERSION ":class,jar:IcedTea;"  \
+   "application/x-java-bean:class,jar:IcedTea;"                         \
+   "application/x-java-bean;version=1.1:class,jar:IcedTea;"             \
+   "application/x-java-bean;version=1.1.1:class,jar:IcedTea;"           \
+@@ -123,7 +136,8 @@
+   "application/x-java-bean;version=1.4.2:class,jar:IcedTea;"           \
+   "application/x-java-bean;version=1.5:class,jar:IcedTea;"             \
+   "application/x-java-bean;version=1.6:class,jar:IcedTea;"             \
+-  "application/x-java-bean;jpi-version=1.6.0_" JDK_UPDATE_VERSION ":class,jar:IcedTea;"    \
++  PLUGIN_BEAN_MIME_DESC7 \
++  "application/x-java-bean;jpi-version=" JPI_VERSION ":class,jar:IcedTea;"    \
+   "application/x-java-vm-npruntime::IcedTea;"
+ 
+ #define PLUGIN_URL NS_INLINE_PLUGIN_CONTRACTID_PREFIX NS_JVM_MIME_TYPE

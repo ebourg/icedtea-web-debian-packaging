@@ -2,15 +2,37 @@
 
 set -e
 
-priority=1061
+multiarch=@multiarch@
+priority=@priority@
 basedir=/@basedir@
 mandir=$basedir/jre/man
+priority7=@priority7@
+base7dir=/@base7dir@
+man7dir=$base7dir/jre/man
 tools='javaws itweb-settings'
 srcext=1.gz
 dstext=1.gz
 
 case "$1" in
 configure)
+   if [ -z "$2" ]; then
+        update_alternatives=y
+    fi
+    if [ -n "$multiarch" ] && [ -n "$2" ]; then
+        for i in $tools; do
+            if [ -z `update-alternatives --list $i 2>/dev/null | grep "^$basedir/"` ]; then
+                update_alternatives=y
+                break
+            fi
+        done
+    fi
+
+    if [ "$update_alternatives" = y ]; then
+    if [ -n "$multiarch" ] && [ "$DPKG_MAINTSCRIPT_ARCH" != $(dpkg --print-architecture) ]; then
+        priority=$(expr $priority - 1)
+        priority7=$(expr $priority7 - 1)
+    fi
+
     for i in $tools; do
         unset slave1 || true
         if [ -e $mandir/man1/$i.$srcext ]; then
@@ -27,6 +49,24 @@ configure)
             $priority \
             $slave1
     done
+
+    for i in $tools; do
+        unset slave1 || true
+        if [ -e $man7dir/man1/$i.$srcext ]; then
+            slave1="--slave \
+                /usr/share/man/man1/$i.$dstext \
+                $i.$dstext \
+                $man7dir/man1/$i.$srcext"
+        fi
+        update-alternatives \
+            --install \
+            /usr/bin/$i \
+            $i \
+            $base7dir/jre/bin/$i \
+            $priority7 \
+            $slave1
+    done
+    fi
 esac
 
 #DEBHELPER#

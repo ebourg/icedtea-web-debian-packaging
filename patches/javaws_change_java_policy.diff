@@ -12,12 +12,14 @@ Index: b/launcher/javaws.in
 ===================================================================
 --- a/launcher/javaws.in
 +++ b/launcher/javaws.in
-@@ -8,7 +8,7 @@
- PROGRAM_NAME=javaws
- CP=@JRE@/lib/rt.jar
- 
--JAVA_ARGS=
-+JAVA_ARGS="-Djava.security.manager -Djava.security.policy=/etc/icedtea-web/javaws.policy"
- ARGS=
- 
- while [ "$#" -gt "0" ]; do
+@@ -50,6 +50,10 @@
+ k=$((k+1))
+ COMMAND[k]="-Dicedtea-web.bin.location=${BINARY_LOCATION}"
+ k=$((k+1))
++COMMAND[k]="-Djava.security.manager"
++k=$((k+1))
++COMMAND[k]="-Djava.security.policy=/etc/icedtea-web/javaws.policy"
++k=$((k+1))
+ COMMAND[k]="${CLASSNAME}"
+ k=$((k+1))
+ j=0
