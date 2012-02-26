@@ -1,3 +1,9 @@
+icedtea-web (1.2~pre2-1) unstable; urgency=low
+
+  * Regenerate the control file.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sun, 26 Feb 2012 17:48:03 +0100
+
 icedtea-web (1.2~pre2-0ubuntu1) precise; urgency=low
 
   * Update to hg 20120226, taken from the icedtea-web-1.2 release branch.
@@ -11,6 +17,7 @@ icedtea-web (1.2~pre1-0ubuntu1) precise; urgency=low
   * Update to hg 20120203, taken from the icedtea-web-1.2 release branch.
   * Build separate plugin packages for OpenJDK 6 and OpenJDK 7, needed
     to provide the path to the runtime and the mime description in the plugin.
+    Closes: #646843.
   * Use icedtea-<jre version>-plugin as the name for both plugin packages.
   * Remove icedtea-web-1.1.4-npapi-fix.patch, fixed upstream.
   * Pass -n to gzip when compressing manpages to be Multi-Arch: same safe.
