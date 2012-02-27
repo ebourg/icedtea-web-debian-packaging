@@ -1,3 +1,9 @@
+icedtea-web (1.2~pre2-2) UNRELEASED; urgency=low
+
+  * icedtea-netx-common: Drop dependency on OpenJDK. Closes: #661428.
+
+ -- Matthias Klose <doko@ubuntu.com>  Mon, 27 Feb 2012 10:53:13 +0100
+
 icedtea-web (1.2~pre2-1) unstable; urgency=low
 
   * Regenerate the control file.
