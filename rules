@@ -118,7 +118,7 @@ endif
 
 control_vars = \
 	'-Vxulrunner:Depends=$(xulrunner_depends)' \
-	$(if $(DEB_HOST_MULTIARCH),'-Vnetx:Depends=icedtea-netx-common')
+	$(if $(DEB_HOST_MULTIARCH),'-Vnetx:Depends=icedtea-netx-common (>= ${binary:Version})')
 
 #	--prefix=/$(jdk_home) \
 
