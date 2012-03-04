@@ -39,12 +39,12 @@ case "$1" in
 	    fi
 
             if [ -n "$multiarch" ] && [ -n "$2" ]; then
-                if [ -n `update-alternatives --list $browser-javaplugin.so 2>/dev/null | grep "^$old_basedir/"` ]; then
+                if [ -n "$(update-alternatives --list $browser-javaplugin.so 2>/dev/null | grep ^$old_basedir/)" ]; then
 		    update-alternatives --remove $browser-javaplugin.so $OLD_PLUGINPTH || true
                 fi
 	    fi
 
-            if [ -z `update-alternatives --list $browser-javaplugin.so 2>/dev/null | grep "^$basedir/"` ]; then
+            if [ -z "$(update-alternatives --list $browser-javaplugin.so 2>/dev/null | grep ^$basedir/)" ]; then
 		update-alternatives --quiet --install \
 		    /usr/lib/$browser_dir/plugins/libjavaplugin.so \
 		    $browser-javaplugin.so \

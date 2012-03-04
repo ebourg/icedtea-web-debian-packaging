@@ -11,12 +11,12 @@ case "$1" in
     upgrade)
         if [ -n "$multiarch" ] && [ -n "$2" ]; then
             for i in $tools; do
-                if [ -n `update-alternatives --list $i 2>/dev/null | grep "^$old_basedir/"` ]; then
+                if [ -n "$(update-alternatives --list $i 2>/dev/null | grep ^$old_basedir/)" ]; then
                     update-alternatives --remove $i $old_basedir/jre/bin/$i || true
                 fi
             done
             for i in $tools; do
-                if [ -n `update-alternatives --list $i 2>/dev/null | grep "^$old_base7dir/"` ]; then
+                if [ -n "$(update-alternatives --list $i 2>/dev/null | grep ^$old_base7dir/)" ]; then
                     update-alternatives --remove $i $old_base7dir/jre/bin/$i || true
                 fi
             done
