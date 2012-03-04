@@ -1,3 +1,9 @@
+icedtea-web (1.2~pre3-3) unstable; urgency=low
+
+  * Really use OpenJDK 7 for the icedtea-7 plugin. Closes: #662239.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sun, 04 Mar 2012 23:47:57 +0100
+
 icedtea-web (1.2~pre3-2) unstable; urgency=low
 
   * Fix another quoting issue. Closes: #662039.
