@@ -1,12 +1,12 @@
 [Desktop Entry]
-Name=@vendor@ Java @RELEASE@ Web Start
-Name[fi]=@vendor@ Java @RELEASE@ - Web Start
-Comment=@vendor@ Java @RELEASE@ Web Start
-Comment[fi]=@vendor@ Java @RELEASE@ - Web Start
-Exec=/@basedir@/bin/javaws %u
+Name=@vendor@ Java Web Start
+Name[fi]=@vendor@ Java - Web Start
+Comment=@vendor@ Java Web Start
+Comment[fi]=@vendor@ Java - Web Start
+Exec=/usr/bin/javaws %u
 Terminal=false
 Type=Application
-Icon=@basename@
+Icon=javaws
 Categories=Application;Network;
 MimeType=application/x-java-jnlp-file;
 NoDisplay=true

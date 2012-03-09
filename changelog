@@ -1,3 +1,10 @@
+icedtea-web (1.2-1) unstable; urgency=low
+
+  * IcedTea-Web 1.2 release.
+  * Make icedtea-netx-common multi-arch installable.
+
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 09 Mar 2012 01:13:55 +0100
+
 icedtea-web (1.2~pre3-3) unstable; urgency=low
 
   * Really use OpenJDK 7 for the icedtea-7 plugin. Closes: #662239.
