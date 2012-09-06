@@ -26,6 +26,15 @@ configure)
             fi
         done
     fi
+    if [ "$update_alternatives" != y ] && [ $priority -gt 1060 ]; then
+        for i in $tools; do
+            oldp=$(update-alternatives --query java | awk -v b=$basedir '/^Alternative:/ && $2~b {p=1} /^Priority:/ && p {print $2; exit}')
+            if [ -n "$oldp" ] && [ "$oldp" -le 1060 ]; then
+                update_alternatives=y
+                break
+            fi
+        done
+    fi
 
     if [ "$update_alternatives" = y ]; then
     if [ -n "$multiarch" ] && [ "$DPKG_MAINTSCRIPT_ARCH" != $(dpkg --print-architecture) ]; then
@@ -65,6 +74,16 @@ configure)
             $base7dir/jre/bin/$i \
             $priority7 \
             $slave1
+
+	# 6's priority is higher, but 6 is not installed, set it to 7
+	if [ $priority -gt $priority7 ] && [ ! -f $base7dir/jre/bin/$i ]; then
+	    update-alternatives --set $i $base7dir/jre/bin/$i
+	fi
+
+	# 7's priority is higher, but 7 is not installed, set it to 6
+	if [ $priority7 -gt $priority ] && [ ! -f $basedir/jre/bin/$i ]; then
+	    update-alternatives --set $i $basedir/jre/bin/$i
+	fi
     done
     fi
 esac
