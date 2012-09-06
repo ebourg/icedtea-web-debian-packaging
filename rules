@@ -152,7 +152,8 @@ control_vars = \
 
 CONFIGURE_ARGS = \
 	--prefix=/usr \
-	--with-pkgversion="$(PKGVERSION)"
+	--with-pkgversion="$(PKGVERSION)" \
+	--disable-docs
 
 ifneq ($(with_plugin_pkg),yes)
   CONFIGURE_ARGS += --disable-plugin
