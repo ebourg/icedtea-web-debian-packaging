@@ -12,7 +12,7 @@ Index: b/launcher/javaws.in
 ===================================================================
 --- a/launcher/javaws.in
 +++ b/launcher/javaws.in
-@@ -50,6 +50,10 @@
+@@ -77,6 +77,10 @@
  k=$((k+1))
  COMMAND[k]="-Dicedtea-web.bin.location=${BINARY_LOCATION}"
  k=$((k+1))

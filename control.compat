@@ -1,0 +1,11 @@
+
+Package: icedtea6-plugin
+Section: web
+Architecture: all
+Depends: icedtea-6-plugin, ${misc:Depends}
+Description: web browser plugin to execute Java applets (dependency package)
+ IcedTeaPlugin is a web browser plugin to execute Java applets, supporting
+ LiveConnect/JavaScript. It is targeted for xulrunner-1.9 and compatible
+ browsers that support the NPAPI.
+ .
+ This is a dependency package, it can be safely removed after upgrade.

@@ -1,3 +1,113 @@
+icedtea-web (1.4.2-1) unstable; urgency=high
+
+  * IcedTea-Web 1.4.2 release.
+    - Security Updates- CVE-2012-4540: Heap-based buffer overflow after
+      triggering event.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 05 Feb 2014 21:11:35 +0100
+
+icedtea-web (1.4.1-1ubuntu1) trusty; urgency=low
+
+  * Merge with Debian; remaining changes:
+    - Regenerate the control file.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 19 Oct 2013 17:51:32 +0200
+
+icedtea-web (1.4.1-1) unstable; urgency=low
+
+  * IcedTea-Web 1.4.1 release.
+  * Build for AArch64.
+  * Don't build icedtea-6-plugin on KFreeBSD.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 19 Oct 2013 17:20:43 +0200
+
+icedtea-web (1.4-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add CVE-2013-4349.diff patch.
+    CVE-2013-4349: Fix IcedTeaScriptableJavaObject::invoke off-by-one
+    heap-based buffer overflow after triggering event attached to applets.
+    (Closes: #723118)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sat, 28 Sep 2013 10:00:03 +0200
+
+icedtea-web (1.4-3) unstable; urgency=low
+
+  * Update from the 1.4 branch:
+    - Fix PR1465, java.io.FileNotFoundException while trying to download
+      a JAR file.
+    - Fix PR1473, javaws should not depend on name of local file.
+    - Fix PR854, resizing an applet several times causes 100% CPU load.
+      Closes: #707729.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 04 Jul 2013 11:01:08 +0200
+
+icedtea-web (1.4-2) unstable; urgency=low
+
+  * Fix icedtea-web for use with OpenJDK 7u25.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 03 Jul 2013 17:34:23 +0200
+
+icedtea-web (1.4-1) unstable; urgency=low
+
+  * IcedTea-Web 1.4 release.
+  * Stop building the icedtea6-plugin transitional package.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 09 May 2013 18:26:47 +0200
+
+icedtea-web (1.3.2-1) unstable; urgency=high
+
+  * IcedTea-Web 1.3.2 release.
+  * Security Updates:
+    - CVE-2013-1927: fixed gifar vulnerability.
+    - CVE-2013-1926: Class-loader incorrectly shared for applets with same
+      relative-path.
+  * Common:
+    - Added new option in itw-settings which allows users to set JVM arguments
+      when plugin is initialized.
+  * NetX:
+    - PR580: http://www.horaoficial.cl/ loads improperly.
+  * Plugin:
+    - PR1260: IcedTea-Web should not rely on GTK.
+    - PR1157: Applets can hang browser after fatal exception.
+  * Refresh patches.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 17 Apr 2013 00:45:29 +0200
+
+icedtea-web (1.3.1-3) unstable; urgency=low
+
+  * Team upload.
+  * Remove mips and mipsel from architectures.  (Closes: #701091)
+
+ -- Niels Thykier <niels@thykier.net>  Thu, 21 Feb 2013 21:30:08 +0100
+
+icedtea-web (1.3.1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Don't forget to remove the itweb-settings alternative.  (Closes: #668444)
+
+ -- Andreas Beckmann <anbe@debian.org>  Sat, 02 Feb 2013 13:09:09 +0100
+
+icedtea-web (1.3.1-2) unstable; urgency=low
+
+  * Team upload.
+  * Rebuild with Java7 as "default" to fix the Java7 variant of
+    the Java plugin.  Thanks to Bálint Réczey for the report.
+    (Closes: #693623)
+
+ -- Niels Thykier <niels@thykier.net>  Thu, 20 Dec 2012 16:06:38 +0100
+
+icedtea-web (1.3.1-1) unstable; urgency=high
+
+  * IcedTea-Web 1.3.1 release.
+  * Security Updates
+    - CVE-2012-4540: Heap-based buffer overflow after triggering event
+      attached to applet.
+  * Common
+    - PR1161: X509VariableTrustManager does not work correctly with OpenJDK7.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 08 Nov 2012 12:39:11 +0100
+
 icedtea-web (1.3-2) unstable; urgency=high
 
   * Configure with --disable-docs (the developer docs aren't shipped

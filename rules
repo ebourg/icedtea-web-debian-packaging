@@ -39,20 +39,31 @@ ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
 	LDFLAGS='$(shell dpkg-buildflags --get LDFLAGS)'
 endif
 
-arch_map	 := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparc64 sh4=sh s390=s390 s390x=s390x ia64=ia64
-archdir_map     := alpha=alpha arm=arm armel=arm amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 s390x=s390x ia64=ia64
+arch_map	 := alpha=alpha arm=arm armel=arm arm64=aarch64 amd64=amd64 hppa=parisc i386=i586 lpia=i586 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparc64 sh4=sh s390=s390 s390x=s390x ia64=ia64
+archdir_map     := alpha=alpha arm=arm armel=arm arm64=aarch64 amd64=amd64 hppa=parisc i386=i386 lpia=i386 m68k=m68k mips=mips mipsel=mipsel powerpc=ppc powerpcspe=ppc ppc64=ppc64 sparc=sparc sparc64=sparcv9 sh4=sh s390=s390 s390x=s390x ia64=ia64
 
 jvmarch	  := $(strip $(patsubst $(DEB_HOST_ARCH)=%, %, \
 			   $(filter $(DEB_HOST_ARCH)=%, $(arch_map))))
 archdir	  := $(strip $(patsubst $(DEB_HOST_ARCH)=%, %, \
 			   $(filter $(DEB_HOST_ARCH)=%, $(archdir_map))))
 
-ifneq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty oneiric precise lenny etch squeeze wheezy sid))
+ifneq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty oneiric precise lenny etch squeeze))
   is7_default = no
   default_version = 6
+  default_plugin_version = 6
 else
   is7_default = yes
   default_version = 7
+  ifneq (,$(filter $(distrel), wheezy))
+    default_plugin_version = 6
+  else
+    default_plugin_version = 7
+  endif
+endif
+
+# dependency package for older releases
+ifeq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty oneiric precise quantal raring lenny etch squeeze wheezy))
+  nopkgs = -Nicedtea6-plugin
 endif
 
 TOP = usr/lib/jvm
@@ -114,11 +125,15 @@ endif
 ifeq ($(is7_default),yes)
   bd_openjdk = openjdk-7-jdk,
   jdk_default_home = $(jdk7_home)
-  netx_depends = openjdk-6-jre (>= 6b23~pre10~) | openjdk-7-jre
 else
   bd_openjdk = openjdk-6-jdk (>= 6b23~pre10~),
   jdk_default_home = $(jdk_home)
+endif
+
+ifeq ($(default_plugin_version),7)
   netx_depends = openjdk-7-jre | openjdk-6-jre (>= 6b23~pre10~)
+else
+  netx_depends = openjdk-6-jre (>= 6b23~pre10~) | openjdk-7-jre
 endif
 
 ifneq (,$(DEB_HOST_MULTIARCH))
@@ -174,10 +189,12 @@ debian/control: debian/control.in debian/rules
 		-e 's/@bd_plugin@/$(bd_plugin)/g' \
 		-e 's/@bd_openjdk@/$(bd_openjdk)/g' \
 		-e 's/@default_version@/$(default_version)/g' \
+		-e 's/@default_plugin_version@/$(default_plugin_version)/g' \
 	     debian/control.in \
 	     $(if $(DEB_HOST_MULTIARCH),debian/control.common) \
 	     $(if $(filter 6, $(jre_versions)),debian/control.6) \
 	     $(if $(filter 7, $(jre_versions)),debian/control.7) \
+	     $(if $(nopkgs),,debian/control.compat) \
 	     $(if $(DEB_HOST_MULTIARCH),,| grep -v '^Multi-Arch:') \
 		  > debian/control
 	@if cmp -s debian/control debian/control.old; then \
@@ -399,21 +416,25 @@ endif
 binary-indep: install
 	dh_testdir -i
 	dh_testroot -i
-	dh_installdocs -i
-	dh_installchangelogs  -i
+	dh_installdocs -i $(nopkgs)
+	dh_installchangelogs  -i $(nopkgs)
 	rm -rf $(d_plug)/usr/share/doc/$(p_plug)
 	ln -s $(p_netx) $(d_plug)/usr/share/doc/$(p_plug)
+ifeq (,$(nopkgs))
 	rm -rf debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
 	ln -s $(p_plug) debian/icedtea6-plugin/usr/share/doc/icedtea6-plugin
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
+endif
+	dh_compress -i $(nopkgs)
+	dh_fixperms -i $(nopkgs)
+	dh_installdeb -i $(nopkgs)
 ifneq (,$(DEB_HOST_MULTIARCH))
 	dh_gencontrol -p icedtea-netx-common -p icedtea-plugin -- $(control_vars)
 endif
+ifeq (,$(nopkgs))
 	dh_gencontrol -p icedtea6-plugin -- -v6b2$(PKGVERSION) $(control_vars)
-	dh_md5sums -i
-	dh_builddeb -i
+endif
+	dh_md5sums -i $(nopkgs)
+	dh_builddeb -i $(nopkgs)
 
 binary: binary-arch binary-indep
 
@@ -429,8 +450,7 @@ binary-arch: install
 	dh_fixperms -s
 	dh_installdeb -s
 	dh_shlibdeps -s
-	dh_gencontrol -s -N icedtea6-plugin -- $(control_vars)
-	dh_gencontrol -p icedtea6-plugin -- -v6b2$(PKGVERSION) $(control_vars)
+	dh_gencontrol -s -- $(control_vars)
 	dh_md5sums -s
 	dh_builddeb -s
 

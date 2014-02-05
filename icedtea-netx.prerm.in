@@ -4,7 +4,7 @@ set -e
 
 basedir=/@basedir@
 base7dir=/@base7dir@
-tools='javaws'
+tools='javaws itweb-settings'
 
 if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then
     for i in $tools; do

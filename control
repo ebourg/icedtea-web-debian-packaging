@@ -3,14 +3,14 @@ Section: java
 Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>, Damien Raude-Morvan <drazzib@debian.org>
-Build-Depends: debhelper (>= 5), xulrunner-dev (>= 1.9.1.3-3) [!alpha !sparc64], openjdk-6-jdk (>= 6b23~pre10~), zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 5), xulrunner-dev (>= 1.9.1.3-3) [!alpha !sparc64], openjdk-7-jdk, zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
+Standards-Version: 3.9.4
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
 Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
 
 Package: icedtea-netx
-Architecture: any
+Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc s390 s390x sparc
 Multi-Arch: same
 Depends: ${netx:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Conflicts: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
@@ -24,21 +24,10 @@ Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
  certificate storing, system certificate store checking, and provides
  the services specified by the jnlp API.
 
-Package: icedtea6-plugin
-Section: web
-Architecture: all
-Depends: icedtea-6-plugin, ${misc:Depends}
-Description: web browser plugin to execute Java applets (dependency package)
- IcedTeaPlugin is a web browser plugin to execute Java applets, supporting
- LiveConnect/JavaScript. It is targeted for xulrunner-1.9 and compatible
- browsers that support the NPAPI.
- .
- This is a dependency package, it can be safely removed after upgrade.
-
 Package: icedtea-plugin
 Section: web
 Architecture: all
-Depends: icedtea-6-plugin, ${misc:Depends}
+Depends: icedtea-7-plugin, ${misc:Depends}
 Description: web browser plugin to execute Java applets (dependency package)
  IcedTeaPlugin is a web browser plugin to execute Java applets, supporting
  LiveConnect/JavaScript. It is targeted for xulrunner-1.9 and compatible
@@ -61,7 +50,7 @@ Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
 
 Package: icedtea-6-plugin
 Section: web
-Architecture: any
+Architecture: amd64 armel armhf hurd-i386 i386 ia64 powerpc s390 s390x sparc
 Multi-Arch: same
 Depends: openjdk-6-jre, icedtea-netx (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b21.2~pre1-1~), icedtea-plugin (<< 1.2~pre1-1~)
@@ -78,7 +67,7 @@ Description: web browser plugin based on OpenJDK and IcedTea to execute Java app
 
 Package: icedtea-7-plugin
 Section: web
-Architecture: any
+Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc s390 s390x sparc
 Multi-Arch: same
 Depends: openjdk-7-jre, icedtea-netx (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b21.2~pre1-1~), icedtea-plugin (<< 1.2~pre1-1~)
