@@ -1,0 +1,13 @@
+Index: b/configure.ac
+===================================================================
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,6 +11,8 @@
+ cd $abs_top_builddir
+ AC_SUBST(abs_top_srcdir)
+ 
++AM_MAINTAINER_MODE
++
+ AC_CANONICAL_HOST
+ AC_PROG_CC
+ AC_PROG_CXX

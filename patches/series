@@ -1,3 +1,4 @@
+am-maintainer-mode.diff
 javaws_change_java_policy.diff
 gcc-option-order.diff
 use-ldflags.diff

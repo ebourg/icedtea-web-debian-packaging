@@ -2,7 +2,7 @@ Index: b/Makefile.am
 ===================================================================
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -310,7 +310,7 @@
+@@ -322,7 +322,7 @@
  
  $(PLUGIN_DIR)/$(BUILT_PLUGIN_LIBRARY): $(addprefix $(PLUGIN_DIR)/,$(PLUGIN_OBJECTS))
  	cd $(PLUGIN_DIR) && \
@@ -11,16 +11,3 @@ Index: b/Makefile.am
  	  $(PLUGIN_OBJECTS) \
  	  $(GLIB_LIBS) \
  	  $(MOZILLA_LIBS) \
-Index: b/Makefile.in
-===================================================================
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -811,7 +811,7 @@
- 
- @ENABLE_PLUGIN_TRUE@$(PLUGIN_DIR)/$(BUILT_PLUGIN_LIBRARY): $(addprefix $(PLUGIN_DIR)/,$(PLUGIN_OBJECTS))
- @ENABLE_PLUGIN_TRUE@	cd $(PLUGIN_DIR) && \
--@ENABLE_PLUGIN_TRUE@	$(CXX) $(CXXFLAGS) \
-+@ENABLE_PLUGIN_TRUE@	$(CXX) $(LDFLAGS) $(CXXFLAGS) \
- @ENABLE_PLUGIN_TRUE@	  $(PLUGIN_OBJECTS) \
- @ENABLE_PLUGIN_TRUE@	  $(GLIB_LIBS) \
- @ENABLE_PLUGIN_TRUE@	  $(MOZILLA_LIBS) \

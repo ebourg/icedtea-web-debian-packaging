@@ -2,7 +2,7 @@ Index: b/Makefile.am
 ===================================================================
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -294,7 +294,7 @@
+@@ -306,7 +306,7 @@
  	mkdir -p $(PLUGIN_DIR) && \
  	cd $(PLUGIN_DIR) && \
  	$(CXX) $(CXXFLAGS) \
@@ -11,7 +11,7 @@ Index: b/Makefile.am
  	  -DJDK_UPDATE_VERSION="\"$(JDK_UPDATE_VERSION)\"" \
  	  -DPLUGIN_NAME="\"IcedTea-Web Plugin\"" \
  	  -DPLUGIN_VERSION="\"$(PLUGIN_VERSION)\"" \
-@@ -302,6 +302,7 @@
+@@ -314,6 +314,7 @@
  	  -DMOZILLA_VERSION_COLLAPSED="$(MOZILLA_VERSION_COLLAPSED)" \
  	  -DICEDTEA_WEB_JRE="\"$(SYSTEM_JRE_DIR)\"" \
  	  -DPLUGIN_BOOTCLASSPATH=$(PLUGIN_BOOTCLASSPATH) \
@@ -19,24 +19,3 @@ Index: b/Makefile.am
  	  $(GLIB_CFLAGS) \
  	  $(MOZILLA_CFLAGS) \
    	  -fvisibility=hidden \
-Index: b/Makefile.in
-===================================================================
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -795,7 +795,7 @@
- @ENABLE_PLUGIN_TRUE@	mkdir -p $(PLUGIN_DIR) && \
- @ENABLE_PLUGIN_TRUE@	cd $(PLUGIN_DIR) && \
- @ENABLE_PLUGIN_TRUE@	$(CXX) $(CXXFLAGS) \
--@ENABLE_PLUGIN_TRUE@	   $(DEFS) $(VERSION_DEFS) \
-+@ENABLE_PLUGIN_TRUE@	   $(DEFS) \
- @ENABLE_PLUGIN_TRUE@	  -DJDK_UPDATE_VERSION="\"$(JDK_UPDATE_VERSION)\"" \
- @ENABLE_PLUGIN_TRUE@	  -DPLUGIN_NAME="\"IcedTea-Web Plugin\"" \
- @ENABLE_PLUGIN_TRUE@	  -DPLUGIN_VERSION="\"$(PLUGIN_VERSION)\"" \
-@@ -803,6 +803,7 @@
- @ENABLE_PLUGIN_TRUE@	  -DMOZILLA_VERSION_COLLAPSED="$(MOZILLA_VERSION_COLLAPSED)" \
- @ENABLE_PLUGIN_TRUE@	  -DICEDTEA_WEB_JRE="\"$(SYSTEM_JRE_DIR)\"" \
- @ENABLE_PLUGIN_TRUE@	  -DPLUGIN_BOOTCLASSPATH=$(PLUGIN_BOOTCLASSPATH) \
-+@ENABLE_PLUGIN_TRUE@	  $(VERSION_DEFS) \
- @ENABLE_PLUGIN_TRUE@	  $(GLIB_CFLAGS) \
- @ENABLE_PLUGIN_TRUE@	  $(MOZILLA_CFLAGS) \
- @ENABLE_PLUGIN_TRUE@  	  -fvisibility=hidden \
