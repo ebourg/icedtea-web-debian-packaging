@@ -11,7 +11,7 @@ Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
 Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
 
 Package: icedtea-netx
-Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc s390 s390x sparc
+Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc ppc64 ppc64el s390 s390x sparc x32
 Multi-Arch: same
 Depends: ${netx:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Conflicts: openjdk-6-jre (<< 6b18-1.8.7-3), openjdk-6-jre-headless (<< 6b18-1.8.7-3)
@@ -51,7 +51,7 @@ Description: NetX - implementation of the Java Network Launching Protocol (JNLP)
 
 Package: icedtea-7-plugin
 Section: web
-Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc s390 s390x sparc
+Architecture: amd64 armel armhf arm64 hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc ppc64 ppc64el s390 s390x sparc x32
 Multi-Arch: same
 Depends: openjdk-7-jre, icedtea-netx (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: icedtea-gcjwebplugin (<< 1.0-1ubuntu4), icedtea6-plugin (<< 6b21.2~pre1-1~), icedtea-plugin (<< 1.2~pre1-1~)

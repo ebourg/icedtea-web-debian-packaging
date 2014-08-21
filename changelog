@@ -1,3 +1,11 @@
+icedtea-web (1.5.1-1) unstable; urgency=medium
+
+  * IcedTea-Web 1.5.1 release.
+  * Build for ppc64 and ppc64el.
+  * Add build support for OpenJDK 8 (Emmanuel Bourg). Closes: #751173.
+
+ -- Matthias Klose <doko@debian.org>  Thu, 21 Aug 2014 09:24:55 +0200
+
 icedtea-web (1.5-2) unstable; urgency=medium
 
   * Build-depend on iceweasel-dev. Closes: #752838.
