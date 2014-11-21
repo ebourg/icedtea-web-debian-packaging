@@ -9,9 +9,6 @@ mandir=$basedir/jre/man
 priority7=@priority7@
 base7dir=/@base7dir@
 man7dir=$base7dir/jre/man
-priority8=@priority8@
-base8dir=/@base8dir@
-man8dir=$base8dir/jre/man
 tools='javaws itweb-settings'
 srcext=1.gz
 dstext=1.gz
@@ -43,7 +40,6 @@ configure)
     if [ -n "$multiarch" ] && [ "$DPKG_MAINTSCRIPT_ARCH" != $(dpkg --print-architecture) ]; then
         priority=$(expr $priority - 1)
         priority7=$(expr $priority7 - 1)
-        priority8=$(expr $priority8 - 1)
     fi
 
     for i in $tools; do
@@ -87,33 +83,6 @@ configure)
 	# 7's priority is higher, but 7 is not installed, set it to 6
 	if [ $priority7 -gt $priority ] && [ ! -f $basedir/jre/bin/$i ]; then
 	    update-alternatives --set $i $basedir/jre/bin/$i
-	fi
-    done
-
-    for i in $tools; do
-        unset slave1 || true
-        if [ -e $man8dir/man1/$i.$srcext ]; then
-            slave1="--slave \
-                /usr/share/man/man1/$i.$dstext \
-                $i.$dstext \
-                $man8dir/man1/$i.$srcext"
-        fi
-        update-alternatives \
-            --install \
-            /usr/bin/$i \
-            $i \
-            $base8dir/jre/bin/$i \
-            $priority8 \
-            $slave1
-
-	# 7's priority is higher, but 7 is not installed, set it to 8
-	if [ $priority7 -gt $priority8 ] && [ ! -f $base8dir/jre/bin/$i ]; then
-	    update-alternatives --set $i $base8dir/jre/bin/$i
-	fi
-
-	# 8's priority is higher, but 8 is not installed, set it to 7
-	if [ $priority8 -gt $priority7 ] && [ ! -f $base7dir/jre/bin/$i ]; then
-	    update-alternatives --set $i $base7dir/jre/bin/$i
 	fi
     done
     fi
