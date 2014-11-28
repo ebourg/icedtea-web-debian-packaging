@@ -1,3 +1,9 @@
+icedtea-web (1.5.2-1) unstable; urgency=medium
+
+  * IcedTea-Web 1.5.2 release.
+
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 28 Nov 2014 12:30:39 +0100
+
 icedtea-web (1.5.2~rc1-1) unstable; urgency=medium
 
   * IcedTea-Web 1.5.2 release candidate 1.
@@ -9,7 +15,7 @@ icedtea-web (1.5.2~rc1-1) unstable; urgency=medium
   * Remove the support for OpenJDK 8, breaks for OpenJDK 7, when 8 is not
     installed. Closes: #759226. LP: #1363785.
 
- -- Matthias Klose <doko@debian.org>  Fri, 21 Nov 2014 08:45:27 +0100
+ -- Matthias Klose <doko@ubuntu.com>  Fri, 21 Nov 2014 08:45:27 +0100
 
 icedtea-web (1.5.1-1) unstable; urgency=medium
 

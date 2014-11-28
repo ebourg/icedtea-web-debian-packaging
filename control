@@ -5,7 +5,7 @@ Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>, Damien Raude-Morvan <drazzib@debian.org>
 Build-Depends: debhelper (>= 5), dh-autoreconf,
  iceweasel-dev [!alpha !sparc64], openjdk-7-jdk, zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
 Vcs-Bzr: http://bazaar.launchpad.net/~openjdk/openjdk/icedtea-web
 Vcs-Browser: https://code.launchpad.net/~openjdk/openjdk/icedtea-web
