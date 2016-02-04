@@ -2,7 +2,7 @@ Index: b/Makefile.am
 ===================================================================
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -322,7 +322,7 @@
+@@ -363,7 +363,7 @@ $(PLUGIN_DIR)/%.o: $(PLUGIN_SRCDIR)/%.cc
  
  $(PLUGIN_DIR)/$(BUILT_PLUGIN_LIBRARY): $(addprefix $(PLUGIN_DIR)/,$(PLUGIN_OBJECTS))
  	cd $(PLUGIN_DIR) && \

@@ -3,7 +3,7 @@
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 multiarch=@multiarch@
-priority=@priority@
+priority=@priority6@
 browser_dirs="@browser_dirs@"
 PLUGIN=@plugin_name@
 basedir=/@basedir@

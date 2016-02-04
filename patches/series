@@ -1,4 +1,7 @@
+branch-updates.diff
 am-maintainer-mode.diff
 javaws_change_java_policy.diff
 gcc-option-order.diff
 use-ldflags.diff
+redirect-fix.diff
+doc-english-only.diff

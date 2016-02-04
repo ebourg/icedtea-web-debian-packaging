@@ -2,7 +2,7 @@ Index: b/Makefile.am
 ===================================================================
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -306,7 +306,7 @@
+@@ -345,7 +345,7 @@ $(PLUGIN_DIR)/%.o: $(PLUGIN_SRCDIR)/%.cc
  	mkdir -p $(PLUGIN_DIR) && \
  	cd $(PLUGIN_DIR) && \
  	$(CXX) $(CXXFLAGS) \
@@ -10,8 +10,8 @@ Index: b/Makefile.am
 +	   $(DEFS) \
  	  -DJDK_UPDATE_VERSION="\"$(JDK_UPDATE_VERSION)\"" \
  	  -DPLUGIN_NAME="\"IcedTea-Web Plugin\"" \
- 	  -DPLUGIN_VERSION="\"$(PLUGIN_VERSION)\"" \
-@@ -314,6 +314,7 @@
+ 	  -DJAVAWS_BIN="\"$(bindir)/$(javaws)\"" \
+@@ -355,6 +355,7 @@ $(PLUGIN_DIR)/%.o: $(PLUGIN_SRCDIR)/%.cc
  	  -DMOZILLA_VERSION_COLLAPSED="$(MOZILLA_VERSION_COLLAPSED)" \
  	  -DICEDTEA_WEB_JRE="\"$(SYSTEM_JRE_DIR)\"" \
  	  -DPLUGIN_BOOTCLASSPATH=$(PLUGIN_BOOTCLASSPATH) \

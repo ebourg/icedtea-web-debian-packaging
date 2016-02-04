@@ -2,7 +2,7 @@ Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -11,6 +11,8 @@
+@@ -12,6 +12,8 @@ abs_top_srcdir=`pwd`
  cd $abs_top_builddir
  AC_SUBST(abs_top_srcdir)
  

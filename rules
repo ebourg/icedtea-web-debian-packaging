@@ -34,6 +34,9 @@ endif
 ifneq (,$(DEB_HOST_MULTIARCH))
   jre_versions += 7
 endif
+ifneq (,$(DEB_HOST_MULTIARCH))
+  jre_versions += 8
+endif
 
 ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
   buildflags := \
@@ -58,8 +61,10 @@ else
   default_version = 7
   ifneq (,$(filter $(distrel), wheezy))
     default_plugin_version = 6
-  else
+  else ifneq (,$(filter $(distrel), sid stretch squeeze trusty utopic vivid wily xenial))
     default_plugin_version = 7
+  else ifneq (,$(filter $(distrel), sid stretch xenial))
+    default_plugin_version = 8
   endif
 endif
 
@@ -69,25 +74,28 @@ ifeq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty one
 endif
 
 TOP = usr/lib/jvm
-jdirname = java-$(shortver)-$(origin)
 origin = openjdk
 basename = openjdk-$(shortver)
 ifneq (,$(DEB_HOST_MULTIARCH))
-  jdk_home = $(TOP)/java-6-openjdk-$(DEB_HOST_ARCH)
+  jdk6_home = $(TOP)/java-6-openjdk-$(DEB_HOST_ARCH)
   jdk7_home = $(TOP)/java-7-openjdk-$(DEB_HOST_ARCH)
+  jdk8_home = $(TOP)/java-8-openjdk-$(DEB_HOST_ARCH)
 else
-  jdk_home = $(TOP)/java-6-openjdk
+  jdk6_home = $(TOP)/java-6-openjdk
   jdk7_home = $(TOP)/java-7-openjdk
 endif
-basedir = $(jdk_home)
+base6dir = $(jdk6_home)
 base7dir = $(jdk7_home)
+base8dir = $(jdk8_home)
 vendor = IcedTea
 shortver = 6
 last_npp_version = 6b18~pre2-2
-priority = 1061
+priority6 = 1061
 # not yet higher than for 6
 priority7 = $(if $(filter yes, $(is7_default)),1071,1060)
 plugin_name = IcedTeaPlugin.so
+# not yet higher than for 7
+priority8 = $(if $(filter yes, $(is8_default)),1081,1070)
 
 ifneq (,$(filter $(DEB_HOST_ARCH), alpha hppa sparc64)$(filter $(distrel), dapper))
   with_plugin_pkg = no
@@ -104,6 +112,7 @@ ifeq ($(distribution),Debian)
     bd_plugin = xulrunner-dev (>= 1.9.1.3-3) [!alpha !sparc64],
   else
     bd_plugin = iceweasel-dev [!alpha !sparc64],
+    bd_plugin = npapi-sdk-dev,
   endif
 else
   ifneq (,$(filter $(distrel),gutsy feisty edgy dapper))
@@ -128,12 +137,17 @@ endif
 ifeq ($(is7_default),yes)
   bd_openjdk = openjdk-7-jdk,
   jdk_default_home = $(jdk7_home)
+else ifeq ($(is8_default),yes)
+  bd_openjdk = openjdk-8-jdk,
+  jdk_default_home = $(jdk8_home)
 else
   bd_openjdk = openjdk-6-jdk (>= 6b23~pre10~),
   jdk_default_home = $(jdk_home)
 endif
 
-ifeq ($(default_plugin_version),7)
+ifeq ($(default_plugin_version),8)
+  netx_depends = openjdk-8-jre | openjdk-7-jre
+else ifeq ($(default_plugin_version),7)
   netx_depends = openjdk-7-jre | openjdk-6-jre (>= 6b23~pre10~)
 else
   netx_depends = openjdk-6-jre (>= 6b23~pre10~) | openjdk-7-jre
@@ -154,8 +168,9 @@ else
   browser_plugin_dirs = mozilla
 endif
 
-java_launcher = /$(basedir)/bin/java
+java6_launcher = /$(base6dir)/bin/java
 java7_launcher = /$(base7dir)/bin/java
+java8_launcher = /$(base8dir)/bin/java
 ifeq ($(distribution),Ubuntu)
   ifeq (,$(filter $(distrel),karmic jaunty intrepid hardy gutsy feisty edgy dapper))
     java_launcher = cautious-launcher %f /$(basedir)/bin/java
@@ -179,12 +194,14 @@ endif
 
 p_netx = icedtea-netx
 p_comm = icedtea-netx-common
-p_plug = icedtea-6-plugin
+p_plug6 = icedtea-6-plugin
 p_plug7 = icedtea-7-plugin
+p_plug8 = icedtea-8-plugin
 d_netx = debian/$(p_netx)
 d_comm = debian/$(p_comm)
-d_plug = debian/$(p_plug)
+d_plug6 = debian/$(p_plug6)
 d_plug7 = debian/$(p_plug7)
+d_plug8 = debian/$(p_plug8)
 
 debian/control: debian/control.in debian/rules
 	@cp -p debian/control debian/control.old
@@ -197,6 +214,7 @@ debian/control: debian/control.in debian/rules
 	     $(if $(DEB_HOST_MULTIARCH),debian/control.common) \
 	     $(if $(filter 6, $(jre_versions)),debian/control.6) \
 	     $(if $(filter 7, $(jre_versions)),debian/control.7) \
+	     $(if $(filter 8, $(jre_versions)),debian/control.8) \
 	     $(if $(nopkgs),,debian/control.compat) \
 	     $(if $(DEB_HOST_MULTIARCH),,| grep -v '^Multi-Arch:') \
 		  > debian/control
@@ -215,6 +233,7 @@ packaging-files:
 	  case "$$f" in \
 	    debian/PLUGIN.*.in) f2=$$(echo $$f | sed 's/PLUGIN/$(p_plug)/;s/\.in$$//');; \
 	    debian/PLUGIN7.*.in) f2=$$(echo $$f | sed 's/PLUGIN7/$(p_plug7)/;s/\.in$$//');; \
+	    debian/PLUGIN8.*.in) f2=$$(echo $$f | sed 's/PLUGIN8/$(p_plug8)/;s/\.in$$//');; \
 	    *) f2=$$(echo $$f | sed 's/JB/$(basename)/;s/\.in$$//'); \
 	  esac; \
 	  sed \
@@ -222,23 +241,28 @@ packaging-files:
 	      -e 's/@vendor@/$(vendor)/g' \
 	      -e 's/@RELEASE@/$(shortver)/g' \
 	      -e 's,@TOP@,$(TOP),g' \
-	      -e 's,@basedir@,$(basedir),g' \
+	      -e 's,@basedir@,$(base6dir),g' \
+	      -e 's,@base6dir@,$(base6dir),g' \
 	      -e 's,@base7dir@,$(base7dir),g' \
-	      -e 's,@jdirname@,$(jdirname),g' \
+	      -e 's,@base8dir@,$(base8dir),g' \
 	      -e 's/@srcname@/$(srcname)/g' \
 	      -e 's/@jvmarch@/$(jvmarch)/g' \
 	      -e 's/@archdir@/$(archdir)/g' \
 	      -e 's/@tag@/$(tag)/g' \
-	      -e 's/@priority@/$(priority)/g' \
+	      -e 's/@priority6@/$(priority6)/g' \
 	      -e 's/@priority7@/$(priority7)/g' \
+	      -e 's/@priority8@/$(priority8)/g' \
 	      -e 's/@mantag@/$(mantag)/g' \
 	      -e 's/@multiarch@/$(DEB_HOST_MULTIARCH)/g' \
 	      -e 's,@plugin_name@,$(plugin_name),g' \
+	      -e 's/@pkg_plugin6@/$(p_plug6)/g' \
 	      -e 's/@pkg_plugin7@/$(p_plug7)/g' \
+	      -e 's/@pkg_plugin8@/$(p_plug8)/g' \
 	      -e 's,@browser_dirs@,$(browser_plugin_dirs),g' \
 	      -e 's,@last_npp_version@,$(last_npp_version),g' \
 	      -e 's,@java_launcher@,$(java_launcher),g' \
 	      -e 's,@java7_launcher@,$(java7_launcher),g' \
+	      -e 's,@java8_launcher@,$(java8_launcher),g' \
 	    $$f > $$f2; \
 	done
 
@@ -247,12 +271,11 @@ autoreconf-stamp:
 	dh_autoreconf
 	touch $@
 
-configure: configure-stamp $(if $(filter 7,$(jre_versions)),configure7-stamp)
-configure-stamp: autoreconf-stamp
+configure6-stamp: autoreconf-stamp
 	dh_testdir
 	rm -rf build
 	mkdir -p build
-	cd build \
+	cd build6 \
 	  && $(buildflags) ../configure $(CONFIGURE_ARGS) --with-jdk-home=/$(jdk_default_home)
 	touch $@
 configure7-stamp: autoreconf-stamp
@@ -262,52 +285,75 @@ configure7-stamp: autoreconf-stamp
 	cd build7 \
 	  && $(buildflags) ../configure $(CONFIGURE_ARGS) --with-jdk-home=/$(jdk_default_home)
 	touch $@
+configure8-stamp: autoreconf-stamp
+	dh_testdir
+	rm -rf build8
+	mkdir -p build8
+	cd build8 \
+	  && $(buildflags) ../configure $(CONFIGURE_ARGS) --with-jdk-home=/$(jdk_default_home)
+	touch $@
 
 build-arch: build-stamp
 build-indep: build-stamp
-build: build-stamp  $(if $(filter 7,$(jre_versions)),build7-stamp)
-build-stamp: configure-stamp
+build: $(if $(filter 6,$(jre_versions)),build6-stamp) \
+  $(if $(filter 7,$(jre_versions)),build7-stamp) $(if $(filter 8,$(jre_versions)),build8-stamp)
+build6-stamp: configure6-stamp
 	dh_testdir
-	$(MAKE) -C build VERSION_DEFS='-DICEDTEA_WEB_JRE="\"/$(jdk_home)\""'
+	$(MAKE) -C build VERSION_DEFS='-DICEDTEA_WEB_JRE="\"/$(jdk6_home)\""'
 	touch $@
 build7-stamp: configure7-stamp
 	dh_testdir
 	$(MAKE) -C build7 VERSION_DEFS='-DHAVE_JAVA7 -DICEDTEA_WEB_JRE="\"/$(jdk7_home)\""'
+	touch $@
+build8-stamp: configure8-stamp
+	dh_testdir
+	$(MAKE) -C build8 VERSION_DEFS='-DHAVE_JAVA8 -DICEDTEA_WEB_JRE="\"/$(jdk8_home)\""'
 	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
 	rm -f *-stamp
-	rm -rf build build7
+	rm -rf build6 build7 build8
 	for f in debian/*.in; do \
 	  case "$$f" in \
-	    debian/PLUGIN.*.in) f2=$$(echo $$f | sed 's/PLUGIN/$(p_plug)/;s/\.in$$//');; \
+	    debian/PLUGIN.*.in) f2=$$(echo $$f | sed 's/PLUGIN/$(p_plug6)/;s/\.in$$//');; \
 	    debian/PLUGIN7.*.in) f2=$$(echo $$f | sed 's/PLUGIN7/$(p_plug7)/;s/\.in$$//');; \
+	    debian/PLUGIN8.*.in) f2=$$(echo $$f | sed 's/PLUGIN8/$(p_plug8)/;s/\.in$$//');; \
 	    *) f2=$$(echo $$f | sed 's/JB/$(basename)/;s/\.in$$//'); \
 	  esac; \
 	  case "$$f2" in debian/control) continue; esac; \
 	  rm -f $$f2; \
 	done
-	rm -rf debian/tmp7
+	rm -rf debian/tmp6 debian/tmp7 debian/tmp8
 	dh_autoreconf_clean
 	dh_clean
 
 install: build packaging-files
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
+	dh_installdirs -p$(p_netx)
+ifneq (,$(filter 6, $(jre_versions)))
 	dh_installdirs -p$(p_netx) \
-		$(jdk_home)/bin \
-		$(jdk_home)/man/man1 \
-		$(jdk_home)/jre/bin \
-		$(jdk_home)/jre/man/man1
+		$(jdk6_home)/bin \
+		$(jdk6_home)/man/man1 \
+		$(jdk6_home)/jre/bin \
+		$(jdk6_home)/jre/man/man1
+endif
 ifneq (,$(filter 7, $(jre_versions)))
 	dh_installdirs -p$(p_netx) \
 		$(jdk7_home)/bin \
 		$(jdk7_home)/man/man1 \
 		$(jdk7_home)/jre/bin \
 		$(jdk7_home)/jre/man/man1
+endif
+ifneq (,$(filter 8, $(jre_versions)))
+	dh_installdirs -p$(p_netx) \
+		$(jdk8_home)/bin \
+		$(jdk8_home)/man/man1 \
+		$(jdk8_home)/jre/bin \
+		$(jdk8_home)/jre/man/man1
 endif
 ifneq (,$(DEB_HOST_MULTIARCH))
 	dh_installdirs -p$(p_comm) \
@@ -322,56 +368,95 @@ else
 		usr/share/mime-info \
 		etc/icedtea-web
 endif
-	dh_installdirs -p$(p_plug) \
-		$(jdk_home)/jre/lib/$(archdir) \
+ifneq (,$(filter 6, $(jre_versions)))
+	dh_installdirs -p$(p_plug6) \
+		$(jdk6_home)/jre/lib/$(archdir) \
 		usr/share/icedtea-web \
 		$(foreach d, $(browser_plugin_dirs), usr/lib/$(d)/plugins)
-	$(MAKE) -C build install DESTDIR=$(CURDIR)/$(d_netx)
-	sed -i 's/java-7-openjdk/java-6-openjdk/g' $(d_netx)/usr/bin/*
-
+	$(MAKE) -C build install DESTDIR=$(CURDIR)/tmp6
+	sed -i 's/java-[78]-openjdk/java-6-openjdk/g' debian/tmp6/usr/bin/*
+endif
 ifneq (,$(filter 7, $(jre_versions)))
 	dh_installdirs -p$(p_plug7) \
 		$(jdk7_home)/jre/lib/$(archdir) \
 		usr/share/icedtea-web \
 		$(foreach d, $(browser_plugin_dirs), usr/lib/$(d)/plugins)
 	$(MAKE) -C build7 install DESTDIR=$(CURDIR)/debian/tmp7
-	sed -i 's/java-6-openjdk/java-7-openjdk/g' debian/tmp7/usr/bin/*
+	sed -i 's/java-[68]-openjdk/java-7-openjdk/g' debian/tmp7/usr/bin/*
 endif
+ifneq (,$(filter 8, $(jre_versions)))
+	dh_installdirs -p$(p_plug8) \
+		$(jdk8_home)/jre/lib/$(archdir) \
+		usr/share/icedtea-web \
+		$(foreach d, $(browser_plugin_dirs), usr/lib/$(d)/plugins)
+	$(MAKE) -C build8 install DESTDIR=$(CURDIR)/debian/tmp8
+	sed -i 's/java-[67]-openjdk/java-8-openjdk/g' debian/tmp8/usr/bin/*
+endif
+	tar -C debian/tmp$(default_plugin_version) -c -f - . | tar -C $(d_netx) -x -f -
+	rm -f $(d_netx)/usr/lib/IcedTeaPlugin.so
+	rm -rf $(d_netx)/usr/bin
+	rm -rf $(d_netx)/usr/share/man
 
 	# FIXME: split out an icedtea-netx-doc package?
 	rm -rf $(d_netx)/usr/share/doc/icedtea-web
 	rm -rf debian/tmp7/usr/share/doc/icedtea-web
 
-	mv $(d_netx)/usr/bin/javaws $(d_netx)/$(jdk_home)/jre/bin/
-	mv $(d_netx)/usr/share/man/man1/javaws.1 $(d_netx)/$(jdk_home)/jre/man/man1/
-	mv $(d_netx)/usr/bin/itweb-settings $(d_netx)/$(jdk_home)/jre/bin/
-	cp debian/itweb-settings.1 $(d_netx)/$(jdk_home)/jre/man/man1/
+ifneq (,$(filter 6, $(jre_versions)))
+	for t in javaws itweb-settings policyeditor; do \
+	  mv debian/tmp6/usr/bin/$$t $(d_netx)/$(jdk6_home)/jre/bin/; \
+	  mv debian/tmp6/usr/share/man/man1/$$t.1 $(d_netx)/$(jdk6_home)/jre/man/man1/; \
+	done
 	mv $(d_netx)/usr/lib/IcedTeaPlugin.so \
-		$(d_plug)/$(jdk_home)/jre/lib/$(archdir)/
-
+		$(d_plug6)/$(jdk6_home)/jre/lib/$(archdir)/
+endif
 ifneq (,$(filter 7, $(jre_versions)))
-	mv debian/tmp7/usr/bin/javaws $(d_netx)/$(jdk7_home)/jre/bin/
-	mv debian/tmp7/usr/share/man/man1/javaws.1 $(d_netx)/$(jdk7_home)/jre/man/man1/
-	mv debian/tmp7/usr/bin/itweb-settings $(d_netx)/$(jdk7_home)/jre/bin/
-	cp debian/itweb-settings.1 $(d_netx)/$(jdk7_home)/jre/man/man1/
+	for t in javaws itweb-settings policyeditor; do \
+	  mv debian/tmp7/usr/bin/$$t $(d_netx)/$(jdk7_home)/jre/bin/; \
+	  mv debian/tmp7/usr/share/man/man1/$$t.1 $(d_netx)/$(jdk7_home)/jre/man/man1/; \
+	done
 	mv debian/tmp7/usr/lib/IcedTeaPlugin.so \
 		$(d_plug7)/$(jdk7_home)/jre/lib/$(archdir)/
 endif
+ifneq (,$(filter 8, $(jre_versions)))
+	for t in javaws itweb-settings policyeditor; do \
+	  mv debian/tmp8/usr/bin/$$t $(d_netx)/$(jdk8_home)/jre/bin/; \
+	  mv debian/tmp8/usr/share/man/man1/$$t.1 $(d_netx)/$(jdk8_home)/jre/man/man1/; \
+	done
+	mv debian/tmp8/usr/lib/IcedTeaPlugin.so \
+		$(d_plug8)/$(jdk8_home)/jre/lib/$(archdir)/
+endif
 
 	# compress manpages
-	find $(d_netx)/$(jdk_home)/jre/man/man1/ -type f ! -type l | xargs gzip -9v -n
+	find $(d_netx)/$(jdk6_home)/jre/man/man1/ $(d_netx)/$(jdk7_home)/jre/man/man1/ $(d_netx)/$(jdk8_home)/jre/man/man1/ -type f ! -type l | xargs gzip -9v -n
 
+ifneq (,$(filter 6, $(jre_versions)))
 	dh_link -p$(p_netx) \
-	  /$(jdk_home)/jre/bin/javaws /$(jdk_home)/bin/javaws \
-	  /$(jdk_home)/jre/man/man1/javaws.1.gz /$(jdk_home)/man/man1/javaws.1.gz \
-          /$(jdk_home)/jre/man/man1/itweb-settings.1.gz /$(jdk_home)/man/man1/itweb-settings.gz
-
+	  /$(jdk6_home)/jre/bin/javaws /$(jdk6_home)/bin/javaws \
+	  /$(jdk6_home)/jre/bin/itweb-settings /$(jdk6_home)/bin/itweb-settings \
+	  /$(jdk6_home)/jre/bin/policyeditor /$(jdk6_home)/bin/policyeditor \
+	  /$(jdk6_home)/jre/man/man1/javaws.1.gz /$(jdk6_home)/man/man1/javaws.1.gz \
+          /$(jdk6_home)/jre/man/man1/itweb-settings.1.gz /$(jdk6_home)/man/man1/itweb-settings.gz \
+	  /$(jdk6_home)/jre/man/man1/policyeditor.1.gz /$(jdk6_home)/man/man1/policyeditor.1.gz
+endif
 ifneq (,$(filter 7, $(jre_versions)))
 	find $(d_netx)/$(jdk7_home)/jre/man/man1/ -type f ! -type l | xargs gzip -9v -n
 	dh_link -p$(p_netx) \
 	  /$(jdk7_home)/jre/bin/javaws /$(jdk7_home)/bin/javaws \
+	  /$(jdk7_home)/jre/bin/itweb-settings /$(jdk7_home)/bin/itweb-settings \
+	  /$(jdk7_home)/jre/bin/policyeditor /$(jdk7_home)/bin/policyeditor \
 	  /$(jdk7_home)/jre/man/man1/javaws.1.gz /$(jdk7_home)/man/man1/javaws.1.gz \
-          /$(jdk7_home)/jre/man/man1/itweb-settings.1.gz /$(jdk7_home)/man/man1/itweb-settings.gz
+          /$(jdk7_home)/jre/man/man1/itweb-settings.1.gz /$(jdk7_home)/man/man1/itweb-settings.gz \
+	  /$(jdk7_home)/jre/man/man1/policyeditor.1.gz /$(jdk7_home)/man/man1/policyeditor.1.gz
+endif
+ifneq (,$(filter 8, $(jre_versions)))
+	find $(d_netx)/$(jdk8_home)/jre/man/man1/ -type f ! -type l | xargs gzip -9v -n
+	dh_link -p$(p_netx) \
+	  /$(jdk8_home)/jre/bin/javaws /$(jdk8_home)/bin/javaws \
+	  /$(jdk8_home)/jre/bin/itweb-settings /$(jdk8_home)/bin/itweb-settings \
+	  /$(jdk8_home)/jre/bin/policyeditor /$(jdk8_home)/bin/policyeditor \
+	  /$(jdk8_home)/jre/man/man1/javaws.1.gz /$(jdk8_home)/man/man1/javaws.1.gz \
+          /$(jdk8_home)/jre/man/man1/itweb-settings.1.gz /$(jdk8_home)/man/man1/itweb-settings.gz \
+	  /$(jdk8_home)/jre/man/man1/policyeditor.1.gz /$(jdk8_home)/man/man1/policyeditor.1.gz
 endif
 
 ifneq (,$(DEB_HOST_MULTIARCH))

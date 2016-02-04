@@ -3,7 +3,7 @@ Section: java
 Priority: extra
 Maintainer: OpenJDK Team <openjdk@lists.launchpad.net>
 Uploaders: Matthias Klose <doko@ubuntu.com>, Damien Raude-Morvan <drazzib@debian.org>
-Build-Depends: debhelper (>= 5), dh-autoreconf,
+Build-Depends: debhelper (>= 5), dh-autoreconf, bc,
  @bd_plugin@ @bd_openjdk@ zip, lsb-release, libgtk2.0-dev, pkg-config, default-jre-headless
 Standards-Version: 3.9.6
 Homepage: http://icedtea.classpath.org/wiki/IcedTea-Web
