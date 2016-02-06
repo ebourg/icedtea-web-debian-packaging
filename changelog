@@ -1,3 +1,10 @@
+icedtea-web (1.6.2-1) unstable; urgency=medium
+
+  * IcedTea-Web 1.6.2 release.
+  * Build using openjdk-8, stop building the plugin for openjdk-7.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 06 Feb 2016 09:25:32 +0100
+
 icedtea-web (1.6.1-4) unstable; urgency=medium
 
   * Update to the tip of the 1.6 branch.

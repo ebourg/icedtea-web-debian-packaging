@@ -29,13 +29,14 @@ endif
 ifneq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty oneiric precise quantal raring lenny etch squeeze wheezy))
   jre_versions = 6
 endif
-# for simplicity build the plugin for 7 for multiarch setup only,
+# for simplicity build the plugin for 7, 8 for multiarch setup only,
 # anything else requires backports.
 ifneq (,$(DEB_HOST_MULTIARCH))
-  jre_versions += 7
-endif
-ifneq (,$(DEB_HOST_MULTIARCH))
-  jre_versions += 8
+  ifneq (,$(filter $(distrel), precise trusty utopic vivid wily wheezy))
+    jre_versions += 7
+  else
+    jre_versions += 8
+  endif
 endif
 
 ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
@@ -57,13 +58,15 @@ ifneq (,$(filter $(distrel),hardy intrepid jaunty karmic lucid maverick natty on
   default_version = 6
   default_plugin_version = 6
 else
-  is7_default = yes
-  default_version = 7
   ifneq (,$(filter $(distrel), wheezy))
     default_plugin_version = 6
-  else ifneq (,$(filter $(distrel), sid stretch squeeze trusty utopic vivid wily xenial))
+  else ifneq (,$(filter $(distrel), squeeze trusty utopic vivid wily))
+    is7_default = yes
+    default_version = 7
     default_plugin_version = 7
   else ifneq (,$(filter $(distrel), sid stretch xenial))
+    is8_default = yes
+    default_version = 8
     default_plugin_version = 8
   endif
 endif
@@ -142,7 +145,7 @@ else ifeq ($(is8_default),yes)
   jdk_default_home = $(jdk8_home)
 else
   bd_openjdk = openjdk-6-jdk (>= 6b23~pre10~),
-  jdk_default_home = $(jdk_home)
+  jdk_default_home = $(jdk6_home)
 endif
 
 ifeq ($(default_plugin_version),8)
@@ -466,11 +469,20 @@ ifneq (,$(DEB_HOST_MULTIARCH))
 		$(d_comm)/usr/share/applications/
 	cp -p debian/itweb-settings.desktop \
 		$(d_comm)/usr/share/applications/
+  ifeq (0,1)
 	for i in /usr/share/icons/hicolor/*/apps/openjdk-$(default_version).png; do \
 	  d=$$(dirname $$i); \
 	  mkdir -p $(d_comm)/$$d; \
 	  cp -p $$i $(d_comm)/$$d/javaws.png; \
 	done
+  else
+	for i in 16 24 32 48; do \
+	  d=$$(dirname $$i); \
+	  mkdir -p $(d_comm)/usr/share/icons/hicolor/$${i}x$${i}/apps; \
+	  cp -p debian/icons/java-icon$$i.png \
+	    $(d_comm)/usr/share/icons/hicolor/$${i}x$${i}/apps/javaws.png; \
+	done
+  endif
 
 	 for i in web-start; do \
 	   cp debian/icedtea-netx-$$i.applications \
